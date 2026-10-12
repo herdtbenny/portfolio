@@ -1,6 +1,7 @@
 import useInView from '../hooks/useInView';
 import RevealLine from '../components/revealLine';
 import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FiArrowUpRight } from 'react-icons/fi';
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mwvdvvwq';
 
@@ -14,7 +15,7 @@ const contactCards = [
     {
         label: 'GitHub',
         desc: 'Code, Projekte & Repositories',
-        href: 'https://github.com/benny2h',
+        href: 'https://github.com/herdtbenny',
         icon: <FaGithub />,
     },
     {
@@ -53,23 +54,26 @@ function Contact() {
                     <RevealLine inView={inView} delay={120}>Kontakt</RevealLine>
                 </h2>
 
-                <div className="mb-16 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-7">
-                    {contactCards.map((card) => (
-                        <a
-                            key={card.label}
-                            href={card.href}
-                            target={card.href.startsWith('http') ? '_blank' : undefined}
-                            rel={card.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                            className="group flex flex-col gap-4 rounded-[26px] border border-white/[0.06] bg-[#0a0a0a] p-7 no-underline transition-all duration-300 ease-out hover:-translate-y-1 hover:border-amber-500/35 hover:shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
-                        >
-                            <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-500/30 bg-amber-500/10 text-xl text-accent">
-                                {card.icon}
-                            </span>
-                            <span className="text-lg font-bold text-white">{card.label}</span>
-                            <span className="font-inter text-sm text-neutral-500">{card.desc}</span>
-                        </a>
+                <ul className="m-0 mb-20 list-none border-b border-white/10 p-0">
+                    {contactCards.map((card, i) => (
+                        <li key={card.label} className="border-t border-white/10">
+                            <a
+                                href={card.href}
+                                target={card.href.startsWith('http') ? '_blank' : undefined}
+                                rel={card.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                                className="group flex items-center gap-5 py-6 no-underline sm:gap-8 sm:py-8"
+                            >
+                                <span className="w-6 font-mono text-[11px] text-neutral-600">{String(i + 1).padStart(2, '0')}</span>
+                                <span className="text-lg text-neutral-500 transition-colors duration-200 group-hover:text-accent sm:text-xl">{card.icon}</span>
+                                <span className="text-2xl font-extrabold tracking-tight text-white transition-transform duration-300 ease-out group-hover:translate-x-2 motion-reduce:transition-none sm:text-4xl">
+                                    {card.label}
+                                </span>
+                                <span className="ml-auto hidden font-inter text-sm text-neutral-500 sm:block">{card.desc}</span>
+                                <FiArrowUpRight className="ml-auto shrink-0 text-xl sm:ml-0 text-neutral-600 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
+                            </a>
+                        </li>
                     ))}
-                </div>
+                </ul>
 
                 <p className="mb-7 font-inter text-[11px] font-semibold uppercase tracking-[3px] text-accent">Nachricht senden</p>
                 <form
