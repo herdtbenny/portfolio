@@ -197,7 +197,7 @@ function Projects() {
                         className="m-0 max-w-xs font-inter text-sm leading-relaxed text-neutral-500"
                         style={fadeUp(inView, 0.25)}
                     >
-                        Eine Agentur, ein Kundenprojekt kurz vor dem Launch und ein Side Project rund um Fußballdaten.
+                        Eine eigene Webagentur und ein Side Project rund um Fußballdaten.
                     </p>
                 </header>
 

@@ -24,22 +24,6 @@ export const PROJECTS = [
         accent: '#e6a558',
     },
     {
-        id: 'behaelterreinigung',
-        title: 'Behälterreinigung Bayern',
-        kind: 'Kundenprojekt',
-        period: '2026',
-        status: 'Launch in Kürze',
-        image: '/projects/behaelterreinigung.jpg',
-        summary:
-            'Website für einen Mülltonnen-Service in Ostbayern, ausgerichtet auf Hausverwaltungen und Kommunen. Eigene Landingpage pro Einsatzgebiet für lokales SEO.',
-        highlights: [
-            'Acht Regionsseiten, Sitemap, llms.txt',
-            'Passwortschutz per Edge-Middleware bis zum Livegang',
-        ],
-        stack: ['Astro', 'TypeScript', 'Tailwind', 'Vercel'],
-        accent: '#3b82f6',
-    },
-    {
         id: 'sportscorings',
         title: 'Sport Scorings',
         kind: 'Side Project',
