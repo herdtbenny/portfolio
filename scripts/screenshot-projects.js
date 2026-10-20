@@ -13,12 +13,6 @@ const VIEWPORT = { width: 1440, height: 900 };
 const projects = [
     { url: 'https://websbybenny.de', file: 'websbybenny.jpg', wait: 6000 },
     { url: 'https://portfolio.websbybenny.de/sportScorings', file: 'sportscorings.jpg' },
-    { url: 'https://restaurant-template.websbybenny.de', file: 'tpl-gastronomie.jpg' },
-    { url: 'https://praxis-template.websbybenny.de', file: 'tpl-praxis.jpg' },
-    { url: 'https://handwerker-template.websbybenny.de', file: 'tpl-handwerk.jpg' },
-    { url: 'https://einzelhandel-template.websbybenny.de', file: 'tpl-einzelhandel.jpg' },
-    { url: 'https://fitness-template.websbybenny.de', file: 'tpl-fitness.jpg' },
-    { url: 'https://beratung-template.websbybenny.de', file: 'tpl-beratung.jpg' },
 ];
 
 async function screenshotProject(browser, project) {

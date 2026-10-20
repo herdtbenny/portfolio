@@ -1,18 +1,33 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const CROSSFADE_SECONDS = 1.2;
 
 // Two overlapping <video> elements crossfade into each other right before the
 // loop point, masking the hard jump-cut a plain `loop` attribute produces.
-function LoopingVideo({ src, className = '', style }) {
+function LoopingVideo({ src, poster, className = '', style }) {
     const aRef = useRef(null);
     const bRef = useRef(null);
     const activeRef = useRef('a');
+
+    // data saver or reduced motion: show the still frame only, skip the download
+    const [stillOnly] = useState(() =>
+        typeof window !== 'undefined' &&
+        (navigator.connection?.saveData || window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    );
 
     useEffect(() => {
         const a = aRef.current;
         const b = bRef.current;
         if (!a || !b) return;
+
+        // the standby copy only gets its src once the first one is fully buffered,
+        // so it is served from cache instead of downloading the file a second time
+        const loadStandby = () => {
+            b.src = src;
+            b.load();
+        };
+        if (a.readyState >= 4) loadStandby();
+        else a.addEventListener('canplaythrough', loadStandby, { once: true });
 
         b.pause();
         b.style.opacity = '0';
@@ -44,10 +59,17 @@ function LoopingVideo({ src, className = '', style }) {
             raf = requestAnimationFrame(tick);
         };
         raf = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(raf);
-    }, []);
+        return () => {
+            cancelAnimationFrame(raf);
+            a.removeEventListener('canplaythrough', loadStandby);
+        };
+    }, [src, stillOnly]);
 
     const videoClassName = `absolute inset-0 h-full w-full object-cover ${className}`;
+
+    if (stillOnly) {
+        return poster ? <img src={poster} alt="" className={videoClassName} style={style} /> : null;
+    }
 
     return (
         <>
@@ -58,6 +80,7 @@ function LoopingVideo({ src, className = '', style }) {
                 playsInline
                 preload="auto"
                 src={src}
+                poster={poster}
                 className={videoClassName}
                 style={style}
             />
@@ -65,8 +88,7 @@ function LoopingVideo({ src, className = '', style }) {
                 ref={bRef}
                 muted
                 playsInline
-                preload="auto"
-                src={src}
+                preload="none"
                 className={`${videoClassName} opacity-0`}
                 style={style}
             />

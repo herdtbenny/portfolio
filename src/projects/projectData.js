@@ -13,14 +13,7 @@ export const PROJECTS = [
         image: '/projects/websbybenny.jpg',
         href: 'https://websbybenny.de',
         linkLabel: 'websbybenny.de',
-        summary:
-            'Meine eigene Webagentur für lokale Betriebe in Regensburg: von der Akquise über Design und Entwicklung bis zur Betreuung nach dem Launch, alles aus einer Hand.',
-        highlights: [
-            'Sechs Branchen-Templates als Startpunkt für jede Kunden-Demo',
-            'Internes Akquise-Dashboard mit Supabase',
-            'Zweisprachig, Dark Mode, vorgerenderte Seiten',
-        ],
-        stack: ['React', 'Tailwind', 'Framer Motion', 'Supabase', 'Vercel'],
+        summary: 'Meine eigene Webagentur für lokale Betriebe in Regensburg.',
         accent: '#e6a558',
     },
     {
@@ -32,23 +25,7 @@ export const PROJECTS = [
         image: '/projects/sportscorings.jpg',
         href: '/sportScorings',
         linkLabel: 'Projekt öffnen',
-        summary:
-            'Live-Tabellen, Spieltage, Torjäger und Teamsuche für Bundesliga, Premier League und weitere Wettbewerbe, gespeist aus der OpenLigaDB API.',
-        highlights: [
-            'Saison- und Ligawahl mit Caching der Ligaliste',
-            'Eigene Ansicht für Tabelle, Spieltag und Torjäger',
-        ],
-        stack: ['React', 'REST API', 'Tailwind'],
+        summary: 'Live-Tabellen, Spieltage und Torjäger für Bundesliga, Premier League und mehr.',
         accent: '#34d399',
     },
-];
-
-// the six demo templates behind Webs by Benny, shown as a strip under its spread
-export const TEMPLATES = [
-    { name: 'Gastronomie', url: 'https://restaurant-template.websbybenny.de', image: '/projects/tpl-gastronomie.jpg' },
-    { name: 'Arztpraxis', url: 'https://praxis-template.websbybenny.de', image: '/projects/tpl-praxis.jpg' },
-    { name: 'Handwerk', url: 'https://handwerker-template.websbybenny.de', image: '/projects/tpl-handwerk.jpg' },
-    { name: 'Einzelhandel', url: 'https://einzelhandel-template.websbybenny.de', image: '/projects/tpl-einzelhandel.jpg' },
-    { name: 'Fitness', url: 'https://fitness-template.websbybenny.de', image: '/projects/tpl-fitness.jpg' },
-    { name: 'Beratung', url: 'https://beratung-template.websbybenny.de', image: '/projects/tpl-beratung.jpg' },
 ];

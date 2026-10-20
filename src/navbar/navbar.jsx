@@ -5,6 +5,7 @@ const ACTIVE_SECTION_OFFSET_RATIO = 0.35;
 const navItems = [
     { label: 'Start', id: 'hero' },
     { label: 'Über mich', id: 'about' },
+    { label: 'Lebenslauf', id: 'lebenslauf' },
     { label: 'Projekte', id: 'projects' },
     { label: 'Kontakt', id: 'kontakt' },
 ];
@@ -27,7 +28,7 @@ function NavBtn({ item, active, onClick, mobile = false }) {
             className={
                 mobile
                     ? 'w-full rounded-2xl px-5 py-3.5 text-center text-base font-medium tracking-wide transition-[color,background,transform] duration-200 ease-out active:scale-[0.97]'
-                    : 'rounded-full px-3.5 py-1.5 text-xs font-medium tracking-wide transition-[color,background,transform] duration-200 ease-out active:scale-[0.95] sm:px-4 sm:text-sm'
+                    : 'rounded-full px-4 py-2 text-xs font-medium tracking-wide transition-[color,background,transform] duration-200 ease-out active:scale-[0.95] sm:px-6 sm:text-sm'
             }
             style={{
                 color: active ? '#F2F2F0' : 'rgba(255,255,255,0.45)',
@@ -46,7 +47,6 @@ function NavBtn({ item, active, onClick, mobile = false }) {
 function Navbar({ scrollTo }) {
     const [mounted, setMounted] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [pageProgress, setPageProgress] = useState(0);
     const [activeSection, setActiveSection] = useState('hero');
 
     useEffect(() => {
@@ -59,9 +59,6 @@ function Navbar({ scrollTo }) {
         const onScroll = () => {
             if (raf) return;
             raf = requestAnimationFrame(() => {
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-                setPageProgress(maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0);
-
                 const offset = window.innerHeight * ACTIVE_SECTION_OFFSET_RATIO;
                 let current = navItems[0].id;
                 for (const item of navItems) {
@@ -113,21 +110,13 @@ function Navbar({ scrollTo }) {
                         style={{ background: 'linear-gradient(to right, transparent 0%, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.3) 75%, transparent 100%)' }}
                     />
 
-                    <ul className="m-0 flex list-none items-center justify-center gap-1 px-2 py-2 sm:gap-1.5 sm:px-3">
+                    <ul className="m-0 flex list-none items-center justify-center gap-2 px-2 py-2 sm:gap-6 sm:px-3">
                         {navItems.map((item) => (
                             <li key={item.id}>
                                 <NavBtn item={item} active={activeSection === item.id} onClick={() => scrollTo(item.id)} />
                             </li>
                         ))}
                     </ul>
-
-                    {/* scroll progress, shows position within the whole page */}
-                    <div className="h-0.5 w-full bg-white/5">
-                        <div
-                            className="h-full bg-accent shadow-[0_0_8px_rgba(230,165,88,0.6)] transition-[width] duration-150 ease-out"
-                            style={{ width: `${pageProgress * 100}%` }}
-                        />
-                    </div>
                 </div>
             </nav>
 

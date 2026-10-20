@@ -24,29 +24,6 @@ const fadeUp = (inView, delay = 0) => ({
     transition: `opacity 0.8s ${EASE} ${delay}s, transform 0.8s ${EASE} ${delay}s`,
 });
 
-const timeline = [
-    {
-        period: 'seit 09/2025',
-        title: 'Praktikant → Werkstudent',
-        place: 'IMPECT GmbH, Köln',
-        detail: 'Praktikum (09/2025 – 01/2026), seither Werkstudent — Softwarelösungen für Fußballdatenanalyse',
-        tag: 'Job',
-    },
-    {
-        period: '10/2023 – vsl. 09/2027',
-        title: 'Bachelor Wirtschaftsinformatik',
-        place: 'OTH Regensburg',
-        tag: 'Studium',
-    },
-    {
-        period: '2022 – 2025',
-        title: 'Werkstudent & Trainer',
-        place: 'SSV Jahn Regensburg',
-        detail: 'Drei Jahre im Profifußball-Verein',
-        tag: 'Verein',
-    },
-];
-
 // icons stay neutral and take their brand color on hover
 const skillGroups = [
     {
@@ -85,14 +62,13 @@ const sectionLabel = 'm-0 font-mono text-[11px] uppercase tracking-[0.18em] text
 
 function About() {
     const [ref, inView] = useInView();
-    const [stackRef, stackInView] = useInView();
 
     return (
         <section
             id="about"
             className="relative box-border overflow-hidden bg-[#000000] px-5 pb-20 pt-28 font-syne sm:px-12 sm:pb-28 sm:pt-32 lg:px-20 lg:pt-36"
         >
-            <div className="pointer-events-none absolute -bottom-24 -left-24 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(230,165,88,0.08)_0%,transparent_70%)] sm:h-[400px] sm:w-[400px] lg:h-[500px] lg:w-[500px]" />
+            <div className="pointer-events-none absolute -bottom-24 -left-24 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(143,176,255,0.08)_0%,transparent_70%)] sm:h-[400px] sm:w-[400px] lg:h-[500px] lg:w-[500px]" />
 
             <div ref={ref} className="relative mx-auto w-full max-w-[1200px]">
                 <header className="mb-14 flex flex-wrap items-end justify-between gap-6 sm:mb-20">
@@ -113,7 +89,7 @@ function About() {
 
                     {/* PHOTO: frameless, fades into the page */}
                     <figure className="relative m-0 lg:col-span-5" style={fadeUp(inView, 0.1)}>
-                        <div className="pointer-events-none absolute inset-x-[5%] bottom-0 top-[15%] -z-0 rounded-full bg-[radial-gradient(circle,rgba(230,165,88,0.18)_0%,transparent_70%)] blur-3xl" />
+                        <div className="pointer-events-none absolute inset-x-[5%] bottom-0 top-[15%] -z-0 rounded-full bg-[radial-gradient(circle,rgba(143,176,255,0.18)_0%,transparent_70%)] blur-3xl" />
                         <img
                             src={bennyImg}
                             alt="Benny Herdt"
@@ -125,73 +101,42 @@ function About() {
                         </figcaption>
                     </figure>
 
-                    {/* TIMELINE: one hairline row per station, newest first */}
-                    <div className="lg:col-span-7">
-                        <div className="mb-6 flex items-baseline justify-between" style={fadeUp(inView, 0.15)}>
-                            <p className={sectionLabel}><span className="text-accent">A</span> &nbsp;Werdegang</p>
-                            <p className="m-0 font-mono text-[11px] uppercase tracking-[0.18em] text-neutral-600">2022 – heute</p>
+                    {/* TECH STACK: label column + plain icon/name list, no pills */}
+                    <div className="lg:col-span-7 lg:pt-4">
+                        <div className="mb-6 flex items-baseline justify-between" style={fadeUp(inView)}>
+                            <p className={sectionLabel}>Tech Stack</p>
+                            <p className="m-0 font-mono text-[11px] uppercase tracking-[0.18em] text-neutral-600">
+                                {skillGroups.reduce((n, g) => n + g.skills.length, 0)} Tools
+                            </p>
                         </div>
-                        <ol className="m-0 list-none border-b border-white/10 p-0">
-                            {timeline.map((item, i) => (
-                                <li
-                                    key={item.title}
-                                    className="group grid grid-cols-1 gap-2 border-t border-white/10 py-7 sm:grid-cols-[170px_1fr] sm:gap-8 sm:py-9"
-                                    style={fadeUp(inView, 0.2 + i * 0.1)}
+                        <div className="border-b border-white/10">
+                            {skillGroups.map((group, i) => (
+                                <div
+                                    key={group.label}
+                                    className="grid grid-cols-1 gap-4 border-t border-white/10 py-6 sm:grid-cols-[140px_1fr] sm:gap-8 sm:py-7"
+                                    style={fadeUp(inView, 0.08 + i * 0.08)}
                                 >
-                                    <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.14em] sm:flex-col sm:items-start sm:justify-start sm:gap-2">
-                                        <span className="text-neutral-400">{item.period}</span>
-                                        <span className="text-accent/80">{item.tag}</span>
-                                    </div>
-                                    <div>
-                                        <p className="m-0 mb-1.5 text-xl font-extrabold leading-tight tracking-tight text-white transition-transform duration-300 ease-out group-hover:translate-x-1.5 motion-reduce:transition-none sm:text-3xl">
-                                            {item.title}
-                                        </p>
-                                        <p className="m-0 font-inter text-sm text-neutral-400">{item.place}</p>
-                                        {item.detail && (
-                                            <p className="m-0 mt-2 max-w-[52ch] font-inter text-sm leading-relaxed text-neutral-600">{item.detail}</p>
-                                        )}
-                                    </div>
-                                </li>
+                                    <p className="m-0 font-mono text-[11px] uppercase tracking-[0.14em] text-neutral-400 sm:pt-1.5">
+                                        <span className="mr-3 text-neutral-600">{String(i + 1).padStart(2, '0')}</span>
+                                        {group.label}
+                                    </p>
+                                    <ul className="m-0 flex list-none flex-wrap gap-x-8 gap-y-4 p-0">
+                                        {group.skills.map(({name, Icon, color}) => (
+                                            <li
+                                                key={name}
+                                                className="group flex items-center gap-2.5"
+                                                style={{'--brand': color}}
+                                            >
+                                                <Icon className="text-lg text-neutral-500 transition-colors duration-200 group-hover:text-[var(--brand)]" />
+                                                <span className="font-inter text-base font-medium text-neutral-300 transition-colors duration-200 group-hover:text-white sm:text-lg">
+                                                    {name}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             ))}
-                        </ol>
-                    </div>
-                </div>
-
-                {/* TECH STACK: label column + plain icon/name list, no pills */}
-                <div ref={stackRef} className="mt-20 sm:mt-28">
-                    <div className="mb-6 flex items-baseline justify-between" style={fadeUp(stackInView)}>
-                        <p className={sectionLabel}><span className="text-accent">B</span> &nbsp;Tech Stack</p>
-                        <p className="m-0 font-mono text-[11px] uppercase tracking-[0.18em] text-neutral-600">
-                            {skillGroups.reduce((n, g) => n + g.skills.length, 0)} Tools
-                        </p>
-                    </div>
-                    <div className="border-b border-white/10">
-                        {skillGroups.map((group, i) => (
-                            <div
-                                key={group.label}
-                                className="grid grid-cols-1 gap-4 border-t border-white/10 py-6 sm:grid-cols-[170px_1fr] sm:gap-8 sm:py-7"
-                                style={fadeUp(stackInView, 0.08 + i * 0.08)}
-                            >
-                                <p className="m-0 font-mono text-[11px] uppercase tracking-[0.14em] text-neutral-400 sm:pt-1.5">
-                                    <span className="mr-3 text-neutral-600">{String(i + 1).padStart(2, '0')}</span>
-                                    {group.label}
-                                </p>
-                                <ul className="m-0 flex list-none flex-wrap gap-x-8 gap-y-4 p-0">
-                                    {group.skills.map(({name, Icon, color}) => (
-                                        <li
-                                            key={name}
-                                            className="group flex items-center gap-2.5"
-                                            style={{'--brand': color}}
-                                        >
-                                            <Icon className="text-lg text-neutral-500 transition-colors duration-200 group-hover:text-[var(--brand)]" />
-                                            <span className="font-inter text-base font-medium text-neutral-300 transition-colors duration-200 group-hover:text-white sm:text-lg">
-                                                {name}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
+                        </div>
                     </div>
                 </div>
             </div>

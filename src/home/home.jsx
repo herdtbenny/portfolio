@@ -3,8 +3,10 @@ import LoopingVideo from '../components/loopingVideo';
 import Navbar from '../navbar/navbar';
 import Hero from '../hero/hero';
 import About from '../about/about';
+import Timeline from '../timeline/timeline';
 import Projects from '../projects/projects';
 import Contact from '../contact/contact';
+import Footer from '../footer/footer';
 
 const SCROLL_FADE_DISTANCE = 700;
 
@@ -44,6 +46,7 @@ function Home() {
             <div className="fixed inset-0 -z-10 overflow-hidden">
                 <LoopingVideo
                     src="/bgVideo.mp4"
+                    poster="/bgPoster.jpg"
                     style={{ filter: `blur(${blur}px) brightness(${brightness}) saturate(1.3)`, transform: `scale(${scale})` }}
                 />
                 <div className="pointer-events-none absolute inset-0 bg-black" style={{ opacity: overlayOpacity }} />
@@ -53,8 +56,10 @@ function Home() {
             <Navbar scrollTo={scrollTo} />
             <Hero />
             <About />
+            <Timeline />
             <Projects />
             <Contact />
+            <Footer />
         </div>
     );
 }
