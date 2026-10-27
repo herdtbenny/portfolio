@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const ACTIVE_SECTION_OFFSET_RATIO = 0.35;
 
 const navItems = [
     { label: 'Start', id: 'hero' },
     { label: 'Über mich', id: 'about' },
+    { label: 'Profil', id: 'profil' },
     { label: 'Lebenslauf', id: 'lebenslauf' },
     { label: 'Projekte', id: 'projects' },
     { label: 'Kontakt', id: 'kontakt' },
@@ -28,7 +30,7 @@ function NavBtn({ item, active, onClick, mobile = false }) {
             className={
                 mobile
                     ? 'w-full rounded-2xl px-5 py-3.5 text-center text-base font-medium tracking-wide transition-[color,background,transform] duration-200 ease-out active:scale-[0.97]'
-                    : 'rounded-full px-4 py-2 text-xs font-medium tracking-wide transition-[color,background,transform] duration-200 ease-out active:scale-[0.95] sm:px-6 sm:text-sm'
+                    : 'rounded-full px-3.5 py-2 text-xs font-medium tracking-wide transition-[color,background,transform] duration-200 ease-out active:scale-[0.95] lg:px-5 lg:text-sm'
             }
             style={{
                 color: active ? '#F2F2F0' : 'rgba(255,255,255,0.45)',
@@ -101,7 +103,7 @@ function Navbar({ scrollTo }) {
     return (
         <>
             {/* Desktop pill nav */}
-            <nav className="fixed left-1/2 top-5 z-50 hidden w-auto whitespace-nowrap font-syne sm:block" style={navEntranceStyle}>
+            <nav className="fixed left-1/2 top-5 z-50 hidden w-auto whitespace-nowrap font-syne md:block" style={navEntranceStyle}>
                 <div className="relative flex flex-col overflow-hidden rounded-[2rem]" style={glassStyle}>
 
                     {/* Specular top-edge gloss */}
@@ -110,18 +112,26 @@ function Navbar({ scrollTo }) {
                         style={{ background: 'linear-gradient(to right, transparent 0%, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.3) 75%, transparent 100%)' }}
                     />
 
-                    <ul className="m-0 flex list-none items-center justify-center gap-2 px-2 py-2 sm:gap-6 sm:px-3">
+                    <ul className="m-0 flex list-none items-center justify-center gap-1 px-2 py-2 lg:gap-3">
                         {navItems.map((item) => (
                             <li key={item.id}>
                                 <NavBtn item={item} active={activeSection === item.id} onClick={() => scrollTo(item.id)} />
                             </li>
                         ))}
+                        <li>
+                            <Link
+                                to="/aufschluesselung"
+                                className="block rounded-full bg-white px-3.5 py-2 text-xs font-semibold tracking-wide text-black no-underline transition-[background,transform] duration-200 ease-out hover:bg-accent active:scale-[0.95] lg:px-5 lg:text-sm"
+                            >
+                                Für Recruiter
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             </nav>
 
-            {/* Mobile hamburger — pinned to the top-right corner of the screen */}
-            <div className="fixed right-5 top-6 z-50 sm:hidden" style={hamburgerEntranceStyle}>
+            {/* Mobile/tablet hamburger — pinned to the top-right corner of the screen */}
+            <div className="fixed right-5 top-6 z-50 md:hidden" style={hamburgerEntranceStyle}>
                 <button
                     onClick={() => setMobileOpen((v) => !v)}
                     aria-label={mobileOpen ? 'Menü schließen' : 'Menü öffnen'}
@@ -146,7 +156,7 @@ function Navbar({ scrollTo }) {
 
             {/* Mobile dropdown — full width, under the hamburger */}
             <div
-                className={`fixed inset-x-5 top-[76px] z-40 overflow-hidden rounded-[1.75rem] font-syne transition-all duration-300 ease-out sm:hidden ${
+                className={`fixed inset-x-5 top-[76px] z-40 overflow-hidden rounded-[1.75rem] font-syne transition-all duration-300 ease-out md:hidden ${
                     mobileOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
                 }`}
                 style={glassStyle}
@@ -155,6 +165,12 @@ function Navbar({ scrollTo }) {
                     {navItems.map((item) => (
                         <NavBtn key={item.id} item={item} active={activeSection === item.id} onClick={() => handleScrollTo(item.id)} mobile />
                     ))}
+                    <Link
+                        to="/aufschluesselung"
+                        className="mt-1 w-full rounded-2xl bg-white px-5 py-3.5 text-center text-base font-semibold tracking-wide text-black no-underline active:scale-[0.97]"
+                    >
+                        Für Recruiter
+                    </Link>
                 </div>
             </div>
         </>

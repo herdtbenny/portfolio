@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FiArrowDown, FiArrowRight } from "react-icons/fi";
 import useInView from "../hooks/useInView";
 import RevealLine from "../components/revealLine";
 
-const roles = ["Entwickler", "Webdesigner", "Student"];
+const roles = ["Entwickler", "Gründer", "Sports Tech"];
 
 const fadeIn = (inView, delay) => ({
     opacity: inView ? 1 : 0,
@@ -49,7 +51,7 @@ function Hero() {
             </div>
 
             {/* role + subline are anchored to the bottom so the name stays centered */}
-            <div className="absolute inset-x-0 bottom-32 z-10 flex flex-col items-center px-5 text-center sm:bottom-44">
+            <div className="absolute inset-x-0 bottom-24 z-10 flex flex-col items-center px-5 text-center sm:bottom-32">
                 <div
                     className="flex h-[1.2em] items-center text-3xl font-bold tracking-tight text-accent transition-[opacity,transform] duration-700 ease-out sm:text-5xl lg:text-6xl"
                     style={fadeIn(inView, 300)}
@@ -62,8 +64,29 @@ function Hero() {
                     className="m-0 mt-8 font-mono text-[11px] uppercase tracking-[0.25em] text-neutral-400 transition-[opacity,transform] duration-700 ease-out sm:text-xs"
                     style={fadeIn(inView, 450)}
                 >
-                    Wirtschaftsinformatik-Student · Regensburg
+                    Wirtschaftsinformatik · Werkstudent bei IMPECT · Gründer von Webs by Benny
                 </p>
+
+                <div
+                    className="mt-9 flex flex-wrap items-center justify-center gap-3 transition-[opacity,transform] duration-700 ease-out"
+                    style={fadeIn(inView, 600)}
+                >
+                    <button
+                        type="button"
+                        onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                        className="group inline-flex items-center gap-2.5 rounded-full bg-white px-5 py-2.5 font-inter text-sm font-semibold text-black transition-[background,transform] duration-200 ease-out hover:bg-accent active:scale-[0.97]"
+                    >
+                        Projekte ansehen
+                        <FiArrowDown className="transition-transform duration-200 group-hover:translate-y-0.5" />
+                    </button>
+                    <Link
+                        to="/aufschluesselung"
+                        className="group inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-black/20 px-5 py-2.5 font-inter text-sm font-semibold text-white no-underline backdrop-blur-md transition-colors duration-200 hover:border-white/50"
+                    >
+                        Für Recruiter
+                        <FiArrowRight className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                    </Link>
+                </div>
             </div>
 
             {/* scroll indicator */}

@@ -13,6 +13,9 @@ const VIEWPORT = { width: 1440, height: 900 };
 const projects = [
     { url: 'https://websbybenny.de', file: 'websbybenny.jpg', wait: 6000 },
     { url: 'https://portfolio.websbybenny.de/sportScorings', file: 'sportscorings.jpg' },
+    { url: 'https://portfolio.websbybenny.de/xg-lab', file: 'xglab.jpg' },
+    { url: 'https://portfolio.websbybenny.de/finance-tracker', file: 'finanztracker.jpg' },
+    { url: 'https://portfolio.websbybenny.de/auth-rollen-system', file: 'rbac.jpg' },
 ];
 
 async function screenshotProject(browser, project) {

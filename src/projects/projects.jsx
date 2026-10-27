@@ -20,6 +20,29 @@ function ProjectLink({ href, className, children, ...rest }) {
     return <a href={href} target="_blank" rel="noopener noreferrer" className={className} {...rest}>{children}</a>;
 }
 
+/* stand-in until a screenshot exists: big glyph on an accent-tinted grid */
+function Cover({ project }) {
+    return (
+        <div
+            className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden bg-[#070707] transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            style={{
+                backgroundImage: `radial-gradient(circle at 50% 120%, ${project.accent}33, transparent 60%), linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)`,
+                backgroundSize: '100% 100%, 32px 32px, 32px 32px',
+            }}
+        >
+            <span className="font-syne text-[7rem] font-extrabold leading-none sm:text-[9rem]" style={{ color: project.accent }}>
+                {project.cover}
+            </span>
+            <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-500">
+                {project.kind}
+            </span>
+            <span className="absolute bottom-4 right-5 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-500">
+                Interaktiv
+            </span>
+        </div>
+    );
+}
+
 /* frameless screenshot: no browser chrome, just the page with a thin ring and a colored glow from the project's accent */
 function Shot({ project, inView }) {
     const img = (
@@ -29,14 +52,18 @@ function Shot({ project, inView }) {
                 style={{ background: `radial-gradient(60% 60% at 50% 50%, ${project.accent}55, transparent 70%)` }}
             />
             <div className="overflow-hidden rounded-[6px] ring-1 ring-white/10">
-                <img
-                    src={project.image}
-                    alt={`Screenshot ${project.title}`}
-                    loading="lazy"
-                    width={2160}
-                    height={1350}
-                    className="block aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                />
+                {project.image ? (
+                    <img
+                        src={project.image}
+                        alt={`Screenshot ${project.title}`}
+                        loading="lazy"
+                        width={2160}
+                        height={1350}
+                        className="block aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    />
+                ) : (
+                    <Cover project={project} />
+                )}
             </div>
         </div>
     );
@@ -87,9 +114,13 @@ function ProjectSpread({ project, index }) {
                     </h3>
 
                     <div style={fadeUp(inView, 0.1)}>
-                        <p className="m-0 mb-6 max-w-[46ch] font-inter text-sm leading-relaxed text-neutral-400">
+                        <p className="m-0 mb-5 max-w-[46ch] font-inter text-sm leading-relaxed text-neutral-400">
                             {project.summary}
                         </p>
+
+                        <ul className="m-0 mb-7 flex max-w-[52ch] list-none flex-wrap gap-x-4 gap-y-1.5 p-0 font-mono text-[11px] uppercase tracking-[0.12em] text-neutral-500">
+                            {project.skills.map((skill) => <li key={skill}>{skill}</li>)}
+                        </ul>
 
                         {project.href && (
                             <ProjectLink
@@ -139,7 +170,10 @@ function Projects() {
                         className="m-0 max-w-xs font-inter text-sm leading-relaxed text-neutral-500"
                         style={fadeUp(inView, 0.25)}
                     >
-                        Eine eigene Webagentur und ein Side Project rund um Fußballdaten.
+                        Eine eigene Webagentur und vier interaktive Projekte – von Fußballdaten über Finanzen bis Security.{' '}
+                        <Link to="/aufschluesselung" className="text-neutral-300 underline decoration-white/25 underline-offset-4 transition-colors hover:text-accent">
+                            Alle Case Studies
+                        </Link>
                     </p>
                 </header>
 

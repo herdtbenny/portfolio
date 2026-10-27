@@ -10,6 +10,8 @@ import {
     SiGitlab,
     SiPostgresql,
     SiTailwindcss,
+    SiNextdotjs,
+    SiDrizzle,
     SiVercel, SiDocker, SiNodedotjs,
     SiCloudflare, SiFormspree, SiPostman
 } from 'react-icons/si';
@@ -30,6 +32,7 @@ const skillGroups = [
         label: 'Frontend',
         skills: [
             {name: 'React', Icon: SiReact, color: '#61dafb'},
+            {name: 'Next.js', Icon: SiNextdotjs, color: '#ffffff'},
             {name: 'Angular', Icon: SiAngular, color: '#dd0031'},
             {name: 'TypeScript', Icon: SiTypescript, color: '#3178c6'},
             {name: 'HTML', Icon: SiHtml5, color: '#e34f26'},
@@ -42,6 +45,7 @@ const skillGroups = [
             {name: 'Java', Icon: FaJava, color: '#f89820'},
             {name: 'Node.js', Icon: SiNodedotjs, color: '#3c873a'},
             {name: 'PostgreSQL', Icon: SiPostgresql, color: '#4169E1'},
+            {name: 'Drizzle ORM', Icon: SiDrizzle, color: '#c5f74f'},
         ],
     },
     {

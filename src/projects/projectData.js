@@ -1,7 +1,9 @@
-// Projects shown in <Projects>, in display order. Images live in
-// public/projects and are re-captured by scripts/screenshot-projects.js —
-// keep both lists in sync.
+// Projects shown in <Projects> and broken down on /aufschluesselung, in display
+// order. Images live in public/projects and are re-captured by
+// scripts/screenshot-projects.js — keep both lists in sync. Projects without an
+// `image` get a generated cover until a screenshot exists.
 // `href` starting with "/" is an in-app route, anything else opens in a new tab.
+// `roles` reference ids from src/focus/roleTracks.js.
 
 export const PROJECTS = [
     {
@@ -13,19 +15,118 @@ export const PROJECTS = [
         image: '/projects/websbybenny.jpg',
         href: 'https://websbybenny.de',
         linkLabel: 'websbybenny.de',
-        summary: 'Meine eigene Webagentur für lokale Betriebe in Regensburg.',
+        summary: 'Meine eigene Webagentur für lokale Betriebe in Regensburg – von der Akquise über das Design bis zum Deployment.',
         accent: '#e6a558',
+        roles: ['business', 'frontend'],
+        skills: ['React', 'Tailwind', 'Vercel', 'Cloudflare', 'Kundenkommunikation', 'Vertrieb'],
+        caseStudy: {
+            problem: 'Viele lokale Betriebe haben veraltete oder gar keine Websites und keine Zeit, sich darum zu kümmern.',
+            approach: 'Ich spreche Betriebe direkt an, baue vorab eine Demo auf Basis ihrer bestehenden Seite und liefere sie auf einer eigenen Subdomain aus – der Kunde sieht das Ergebnis, bevor er sich entscheidet.',
+            highlights: [
+                'Kompletter Prozess in einer Hand: Akquise, Anforderungen, Design, Umsetzung, Hosting',
+                'Wiederholbarer Workflow von der Analyse der Bestandsseite bis zur Live-Demo',
+                'Deployment über Vercel mit eigenen Subdomains und DNS über Cloudflare',
+            ],
+            next: 'Wartungspakete und ein Kundendashboard für Inhalte.',
+        },
+    },
+    {
+        id: 'xglab',
+        title: 'xG Lab',
+        kind: 'Data Science',
+        period: '2026',
+        status: 'Live',
+        href: '/xg-lab',
+        linkLabel: 'Modell ausprobieren',
+        summary: 'Ein interaktives Expected-Goals-Modell: Schüsse aufs Feld setzen, Torwahrscheinlichkeit live berechnen, verdientes Ergebnis ableiten.',
+        accent: '#f5a524',
+        cover: '◎',
+        roles: ['data', 'frontend'],
+        skills: ['Logistische Regression', 'Wahrscheinlichkeitsrechnung', 'Datenvisualisierung', 'SVG', 'React'],
+        caseStudy: {
+            problem: 'Tore allein erzählen wenig über die Qualität eines Spiels. Expected Goals (xG) bewerten jede Chance – aber das Modell dahinter bleibt für die meisten eine Blackbox.',
+            approach: 'Ein logistisches Modell auf Distanz und Schusswinkel, ergänzt um Körperteil und Spielsituation. Alles läuft im Browser und ist interaktiv, damit man das Verhalten des Modells direkt sieht.',
+            highlights: [
+                'Schusswinkel geometrisch exakt aus der Torbreite berechnet, nicht geschätzt',
+                'Ergebnis-Wahrscheinlichkeit exakt über die Poisson-Binomial-Verteilung statt Monte-Carlo',
+                'xG-Heatmap über das ganze Feld, kumulierter xG-Verlauf und CSV-Export',
+                'Reproduzierbare Beispielspiele durch einen deterministischen Zufallsgenerator',
+            ],
+            next: 'Koeffizienten auf offenen Eventdaten (z. B. StatsBomb Open Data) fitten und gegen Log-Loss evaluieren.',
+        },
     },
     {
         id: 'sportscorings',
         title: 'Sport Scorings',
-        kind: 'Side Project',
+        kind: 'Daten-Dashboard',
         period: '2026',
         status: 'Live',
         image: '/projects/sportscorings.jpg',
         href: '/sportScorings',
         linkLabel: 'Projekt öffnen',
-        summary: 'Live-Tabellen, Spieltage und Torjäger für Bundesliga, Premier League und mehr.',
+        summary: 'Live-Tabellen, Spieltage und Torjäger für Bundesliga, Premier League und mehr – direkt aus einer öffentlichen REST-API.',
         accent: '#34d399',
+        roles: ['data', 'frontend'],
+        skills: ['React', 'REST-APIs', 'Caching', 'Datenaufbereitung', 'Responsive UI'],
+        caseStudy: {
+            problem: 'Die OpenLigaDB liefert Hunderte Ligen, darunter viele Test- und Amateurdaten. Wer nur die Profiligen sehen will, findet sie kaum.',
+            approach: 'Eine Whitelist professioneller Wettbewerbe filtert die Rohdaten, Saisons und Ligen werden daraus abgeleitet. Die Ligaliste wird in der Session gecacht, um API-Calls zu sparen.',
+            highlights: [
+                'Vier Ansichten: Tabelle, Spieltag, Torjäger, Teamsuche',
+                'Abgeleiteter State statt doppelter Datenhaltung (useMemo-Ketten)',
+                'Session-Cache für die Ligaliste, Fehler- und Ladezustände durchgängig behandelt',
+            ],
+            next: 'Formkurven und Head-to-Head-Vergleiche aus den Spieldaten berechnen.',
+        },
+    },
+    {
+        id: 'finanztracker',
+        title: 'Finanz Tracker',
+        kind: 'Business-Dashboard',
+        period: '2026',
+        status: 'Live',
+        href: '/finance-tracker',
+        linkLabel: 'Dashboard öffnen',
+        summary: 'Budgets, Cashflow und Sparziele auf einen Blick – mit automatischer Auswertung und Prognose zum Monatsende.',
+        accent: '#22d3ee',
+        cover: '€',
+        roles: ['business', 'frontend'],
+        skills: ['KPI-Design', 'Datenmodellierung', 'Controlling-Logik', 'Persistenz', 'SVG-Charts'],
+        caseStudy: {
+            problem: 'Banking-Apps zeigen Buchungen, aber keine Antworten: Wo geht das Geld hin, halte ich mein Budget, wann erreiche ich mein Sparziel?',
+            approach: 'Ein Dashboard, das aus Rohbuchungen Kennzahlen ableitet – Sparquote, Budgetauslastung, Vormonatsvergleich und eine lineare Prognose für den laufenden Monat.',
+            highlights: [
+                'KPIs mit Einordnung (Sparquote gegen die 20-%-Faustregel)',
+                'Budgets inline editierbar, Überschreitungen werden automatisch markiert',
+                'Daten bleiben lokal im Browser gespeichert, Export als CSV',
+                'Demo-Daten wandern mit dem aktuellen Datum mit, damit das Dashboard nie veraltet wirkt',
+            ],
+            next: 'CSV-Import von Bank-Exporten mit automatischer Kategorisierung.',
+        },
+    },
+    {
+        id: 'rbac',
+        title: 'Auth & Rollen-System',
+        kind: 'Security / Backend',
+        period: '2026',
+        status: 'Live',
+        href: '/auth-rollen-system',
+        linkLabel: 'Playground öffnen',
+        summary: 'Rollenbasierte Zugriffskontrolle für eine Vereins-App: echte signierte JWTs, eine editierbare Berechtigungsmatrix und eine Middleware, die jede Entscheidung offenlegt.',
+        accent: '#a78bfa',
+        cover: '⌘',
+        roles: ['frontend', 'business'],
+        skills: ['JWT', 'HMAC-SHA256', 'Web Crypto API', 'RBAC', 'API-Design'],
+        caseStudy: {
+            problem: 'In Vereins- und Team-Software sehen Admins, Trainer und Spieler unterschiedliche Daten. Fehler in der Rechteprüfung sind eines der häufigsten Sicherheitsprobleme (OWASP Top 10: Broken Access Control).',
+            approach: 'Tokens werden mit HMAC-SHA256 signiert, die Middleware prüft der Reihe nach Signatur, Ablaufzeit, Rolle und Ressourcen-Besitz. Jeder Schritt wird im Log sichtbar.',
+            highlights: [
+                'Echte JWT-Signatur und -Verifikation mit der Web Crypto API, ohne Bibliothek',
+                'Angriffs-Demo: gefälschte Admin-Rolle scheitert an der Signaturprüfung',
+                'Ownership-Regel: Spieler sehen ihre eigenen Statistiken, aber nicht die anderer',
+                'Rollen im Token, Rechte serverseitig – Änderungen greifen ohne neuen Login',
+            ],
+            next: 'Refresh-Token-Rotation und asymmetrische Signaturen (RS256) für verteilte Dienste.',
+        },
     },
 ];
