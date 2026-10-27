@@ -29,7 +29,7 @@ function initialState() {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
         if (saved?.transactions) return saved;
     } catch { /* storage blocked or corrupt: fall back to demo data */ }
-    return { transactions: demoTransactions(), budgets: DEFAULT_BUDGETS, goal: { name: 'Neuer Laptop', target: 1800 } };
+    return { transactions: demoTransactions(), budgets: DEFAULT_BUDGETS, goal: { name: 'Neuer Laptop', target: 4500 } };
 }
 
 function sumBy(list, type) {
@@ -177,7 +177,7 @@ export default function FinanceTracker() {
 
     const removeTransaction = (id) => setState((s) => ({ ...s, transactions: s.transactions.filter((t) => t.id !== id) }));
     const setBudget = (id, value) => setState((s) => ({ ...s, budgets: { ...s.budgets, [id]: Math.max(0, Number(value) || 0) } }));
-    const resetDemo = () => setState({ transactions: demoTransactions(), budgets: DEFAULT_BUDGETS, goal: { name: 'Neuer Laptop', target: 1800 } });
+    const resetDemo = () => setState({ transactions: demoTransactions(), budgets: DEFAULT_BUDGETS, goal: { name: 'Neuer Laptop', target: 4500 } });
 
     const exportCsv = () => {
         const rows = transactions.map((t) => [t.date, `"${t.description.replace(/"/g, '""')}"`, t.type, categoryById(t.category).label, t.amount.toFixed(2)].join(';'));
@@ -319,7 +319,7 @@ export default function FinanceTracker() {
 
                     {/* transactions */}
                     <section className={`${panel} lg:col-span-7`}>
-                        <form onSubmit={addTransaction} className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-[auto_1fr_90px_auto] xl:grid-cols-[auto_1fr_90px_auto_auto_auto]">
+                        <form onSubmit={addTransaction} className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-[auto_1fr_90px_auto]">
                             <select value={form.type} onChange={(e) => setForm((f) => ({ ...f, type: e.target.value, category: e.target.value === 'in' ? 'gehalt' : 'essen' }))} className={input}>
                                 <option value="out">Ausgabe</option>
                                 <option value="in">Einnahme</option>

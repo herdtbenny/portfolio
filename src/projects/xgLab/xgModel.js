@@ -56,8 +56,8 @@ export function sampleMatch(seed = 7) {
     const make = (team, count) => {
         for (let i = 0; i < count; i++) {
             const inBox = rand() < 0.68;
-            const y = inBox ? 4 + rand() * 13 : 17 + rand() * 13;
-            const spread = inBox ? 20 : 30;
+            const y = inBox ? 2.5 + rand() * 14 : 17 + rand() * 13;
+            const spread = inBox ? 18 : 30;
             const x = GOAL.x + (rand() - 0.5) * spread;
             const bodyPart = inBox && rand() < 0.22 ? 'head' : 'foot';
             const r = rand();

@@ -12,7 +12,7 @@ const TEAMS = {
     away: { label: 'Gast', color: '#8fb0ff' },
 };
 const HEAT_CELL = 2;
-const BIG_CHANCE = 0.3;
+const BIG_CHANCE = 0.25;
 
 const label = 'm-0 mb-2.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-600';
 const panel = 'rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-5';
