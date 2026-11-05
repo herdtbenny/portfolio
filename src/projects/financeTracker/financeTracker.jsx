@@ -1,18 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FiChevronLeft, FiChevronRight, FiDownload, FiPlus, FiRotateCcw, FiTrash2 } from 'react-icons/fi';
 import ProjectHeader from '../../components/projectHeader';
+import useProjectTheme from '../../components/useProjectTheme';
 import {
     CATEGORIES, INCOME_CATEGORIES, DEFAULT_BUDGETS,
     monthKey, shiftMonth, formatEur, demoTransactions,
 } from './financeData';
 
-const ACCENT = '#22d3ee';
+const ACCENT = '#0d9488';
+// darker than the chart colors so amounts stay readable on the light theme
+const INCOME = '#059669';
+const EXPENSE = '#db2777';
 const STORAGE_KEY = 'finance_tracker_v1';
 const ALL_CATEGORIES = [...CATEGORIES, ...INCOME_CATEGORIES];
 
-const panel = 'rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-5';
-const label = 'm-0 mb-3 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-600';
-const input = 'rounded-lg border border-white/10 bg-black px-3 py-2 font-mono text-xs text-white outline-none transition-colors focus:border-[#22d3ee]';
+const panel = 'rounded-p border border-p-fg/[0.06] bg-p-panel p-5 shadow-p';
+const label = 'm-0 mb-3 font-p-mono text-[10px] font-semibold uppercase tracking-wider text-p-subtle';
+const input = 'rounded-p-sm border border-p-fg/10 bg-p-bg px-3 py-2 font-p-mono text-xs text-p-fg outline-none transition-colors focus:border-p-accent';
 
 const todayKey = () => {
     const d = new Date();
@@ -41,7 +45,7 @@ function Donut({ slices, total }) {
     let offset = 0;
     return (
         <svg viewBox="0 0 140 140" className="h-36 w-36 shrink-0" role="img" aria-label="Ausgaben nach Kategorie">
-            <circle cx="70" cy="70" r={R} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="16" />
+            <circle cx="70" cy="70" r={R} fill="none" style={{ stroke: 'rgb(var(--p-fg) / 0.06)' }} strokeWidth="16" />
             {slices.map((s) => {
                 const len = total ? (s.value / total) * C : 0;
                 const el = (
@@ -61,8 +65,8 @@ function Donut({ slices, total }) {
                 offset += len;
                 return el;
             })}
-            <text x="70" y="66" textAnchor="middle" fontSize="9" fill="#737373" fontFamily="DM Mono, monospace">AUSGABEN</text>
-            <text x="70" y="82" textAnchor="middle" fontSize="13" fill="#fff" fontFamily="DM Mono, monospace">{Math.round(total)} €</text>
+            <text x="70" y="66" textAnchor="middle" fontSize="9" style={{ fill: 'rgb(var(--p-muted))', fontFamily: 'var(--p-font-mono)' }}>AUSGABEN</text>
+            <text x="70" y="82" textAnchor="middle" fontSize="13" style={{ fill: 'rgb(var(--p-fg))', fontFamily: 'var(--p-font-mono)' }}>{Math.round(total)} €</text>
         </svg>
     );
 }
@@ -75,7 +79,7 @@ function MonthBars({ months }) {
     const sy = (v) => (v / max) * (H - 2 * P);
     return (
         <svg viewBox={`0 0 ${W} ${H}`} className="block w-full" role="img" aria-label="Einnahmen und Ausgaben der letzten sechs Monate">
-            <line x1={P} x2={W - P} y1={H - P} y2={H - P} stroke="rgba(255,255,255,0.08)" />
+            <line x1={P} x2={W - P} y1={H - P} y2={H - P} style={{ stroke: 'rgb(var(--p-fg) / 0.1)' }} />
             {months.map((m, i) => {
                 const cx = P + slot * i + slot / 2;
                 return (
@@ -86,7 +90,7 @@ function MonthBars({ months }) {
                         <rect x={cx + 2} y={H - P - sy(m.expense)} width={bw} height={sy(m.expense)} rx="3" fill="#f472b6" opacity={m.active ? 1 : 0.45}>
                             <title>{`Ausgaben ${formatEur(m.expense)}`}</title>
                         </rect>
-                        <text x={cx} y={H - 6} textAnchor="middle" fontSize="10" fill={m.active ? '#fff' : '#525252'} fontFamily="DM Mono, monospace">
+                        <text x={cx} y={H - 6} textAnchor="middle" fontSize="10" style={{ fill: m.active ? 'rgb(var(--p-fg))' : 'rgb(var(--p-subtle))', fontFamily: 'var(--p-font-mono)' }}>
                             {monthLabel(m.key).slice(0, 3)}
                         </text>
                     </g>
@@ -100,13 +104,14 @@ function Kpi({ title, value, hint, color = '#fff' }) {
     return (
         <div className={panel}>
             <p className={label}>{title}</p>
-            <p className="m-0 font-mono text-xl text-white sm:text-2xl" style={{ color }}>{value}</p>
-            {hint && <p className="m-0 mt-1.5 font-mono text-[10px] uppercase tracking-wider text-neutral-600">{hint}</p>}
+            <p className="m-0 font-p-mono text-xl text-p-fg sm:text-2xl" style={{ color }}>{value}</p>
+            {hint && <p className="m-0 mt-1.5 font-p-mono text-[10px] uppercase tracking-wider text-p-subtle">{hint}</p>}
         </div>
     );
 }
 
 export default function FinanceTracker() {
+    const themeClass = useProjectTheme('finance');
     const [state, setState] = useState(initialState);
     const [month, setMonth] = useState(() => monthKey(todayKey()));
     const [query, setQuery] = useState('');
@@ -193,27 +198,27 @@ export default function FinanceTracker() {
     const formCategories = form.type === 'in' ? INCOME_CATEGORIES : CATEGORIES;
 
     return (
-        <div className="min-h-screen bg-[#000000] font-['DM_Sans',_system-ui,_sans-serif] text-white">
-            <ProjectHeader title="Finanz Tracker" subtitle="Budgets · Cashflow · Sparziel" accent={ACCENT} icon="€" caseStudyId="finanztracker" />
+        <div className={`min-h-screen bg-p-bg font-p-body text-p-fg ${themeClass}`}>
+            <ProjectHeader title="Finanz Tracker" subtitle="Budgets · Cashflow · Sparziel" accent={ACCENT} icon="€" />
 
             <main className="mx-auto max-w-[1400px] px-4 py-6 sm:px-8 sm:py-8">
                 {/* month switcher */}
                 <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
-                        <button type="button" onClick={() => setMonth((m) => shiftMonth(m, -1))} className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-neutral-400 hover:text-white" aria-label="Vorheriger Monat"><FiChevronLeft /></button>
-                        <h1 className="m-0 min-w-[200px] text-center font-syne text-xl font-extrabold tracking-tight sm:text-2xl">{monthLabel(month)}</h1>
-                        <button type="button" onClick={() => setMonth((m) => shiftMonth(m, 1))} className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-neutral-400 hover:text-white" aria-label="Nächster Monat"><FiChevronRight /></button>
+                        <button type="button" onClick={() => setMonth((m) => shiftMonth(m, -1))} className="flex h-9 w-9 items-center justify-center rounded-p-sm border border-p-fg/10 text-p-muted hover:text-p-fg" aria-label="Vorheriger Monat"><FiChevronLeft /></button>
+                        <h1 className="m-0 min-w-[200px] text-center font-p-display text-xl font-extrabold tracking-tight sm:text-2xl">{monthLabel(month)}</h1>
+                        <button type="button" onClick={() => setMonth((m) => shiftMonth(m, 1))} className="flex h-9 w-9 items-center justify-center rounded-p-sm border border-p-fg/10 text-p-muted hover:text-p-fg" aria-label="Nächster Monat"><FiChevronRight /></button>
                     </div>
                     <div className="flex gap-2">
-                        <button type="button" onClick={exportCsv} className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-neutral-300 hover:border-white/25 hover:text-white"><FiDownload /> CSV</button>
-                        <button type="button" onClick={resetDemo} className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-neutral-300 hover:border-white/25 hover:text-white"><FiRotateCcw /> Demo-Daten</button>
+                        <button type="button" onClick={exportCsv} className="inline-flex items-center gap-2 rounded-full border border-p-fg/10 px-4 py-2 font-p-mono text-[11px] uppercase tracking-wider text-p-fg/80 hover:border-p-fg/25 hover:text-p-fg"><FiDownload /> CSV</button>
+                        <button type="button" onClick={resetDemo} className="inline-flex items-center gap-2 rounded-full border border-p-fg/10 px-4 py-2 font-p-mono text-[11px] uppercase tracking-wider text-p-fg/80 hover:border-p-fg/25 hover:text-p-fg"><FiRotateCcw /> Demo-Daten</button>
                     </div>
                 </div>
 
                 <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
-                    <Kpi title="Einnahmen" value={formatEur(income)} color="#34d399" />
-                    <Kpi title="Ausgaben" value={formatEur(expense)} color="#f472b6" />
-                    <Kpi title="Saldo" value={formatEur(balance)} color={balance >= 0 ? '#fff' : '#f87171'} />
+                    <Kpi title="Einnahmen" value={formatEur(income)} color={INCOME} />
+                    <Kpi title="Ausgaben" value={formatEur(expense)} color={EXPENSE} />
+                    <Kpi title="Saldo" value={formatEur(balance)} color={balance >= 0 ? 'rgb(var(--p-fg))' : '#dc2626'} />
                     <Kpi title="Sparquote" value={`${(savingsRate * 100).toFixed(0)} %`} hint={savingsRate >= 0.2 ? 'über der 20-%-Faustregel' : 'unter der 20-%-Faustregel'} color={ACCENT} />
                 </div>
 
@@ -229,11 +234,11 @@ export default function FinanceTracker() {
                                     const ratio = budget ? c.value / budget : 0;
                                     return (
                                         <li key={c.id}>
-                                            <div className="mb-1 flex items-center justify-between font-mono text-[11px]">
-                                                <span className="flex items-center gap-2 text-neutral-300">
+                                            <div className="mb-1 flex items-center justify-between font-p-mono text-[11px]">
+                                                <span className="flex items-center gap-2 text-p-fg/80">
                                                     <span className="h-2 w-2 rounded-full" style={{ background: c.color }} />{c.label}
                                                 </span>
-                                                <span className={ratio > 1 ? 'text-red-400' : 'text-neutral-500'}>
+                                                <span className={ratio > 1 ? 'text-red-400' : 'text-p-muted'}>
                                                     {Math.round(c.value)} /{' '}
                                                     {editingBudget === c.id ? (
                                                         <input
@@ -242,14 +247,14 @@ export default function FinanceTracker() {
                                                             defaultValue={budget}
                                                             onBlur={(e) => { setBudget(c.id, e.target.value); setEditingBudget(null); }}
                                                             onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-                                                            className="w-16 rounded border border-white/20 bg-black px-1 text-white outline-none"
+                                                            className="w-16 rounded border border-p-fg/20 bg-p-bg px-1 text-p-fg outline-none"
                                                         />
                                                     ) : (
-                                                        <button type="button" onClick={() => setEditingBudget(c.id)} className="underline decoration-dotted underline-offset-2 hover:text-white">{budget} €</button>
+                                                        <button type="button" onClick={() => setEditingBudget(c.id)} className="underline decoration-dotted underline-offset-2 hover:text-p-fg">{budget} €</button>
                                                     )}
                                                 </span>
                                             </div>
-                                            <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                                            <div className="h-1.5 overflow-hidden rounded-full bg-p-fg/[0.06]">
                                                 <div
                                                     className="h-full rounded-full transition-[width] duration-500"
                                                     style={{ width: `${Math.min(100, ratio * 100)}%`, background: ratio > 1 ? '#f87171' : c.color }}
@@ -269,13 +274,13 @@ export default function FinanceTracker() {
                             {insights.length ? (
                                 <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
                                     {insights.map((text) => (
-                                        <li key={text} className="flex gap-2.5 text-sm leading-relaxed text-neutral-300">
+                                        <li key={text} className="flex gap-2.5 text-sm leading-relaxed text-p-fg/80">
                                             <span className="mt-2 h-1 w-1 shrink-0 rounded-full" style={{ background: ACCENT }} />{text}
                                         </li>
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="m-0 text-sm text-neutral-500">Keine Buchungen in diesem Monat.</p>
+                                <p className="m-0 text-sm text-p-muted">Keine Buchungen in diesem Monat.</p>
                             )}
                         </section>
                         <section className={panel}>
@@ -284,24 +289,24 @@ export default function FinanceTracker() {
                                 <input
                                     value={goal.name}
                                     onChange={(e) => setState((s) => ({ ...s, goal: { ...s.goal, name: e.target.value } }))}
-                                    className="min-w-0 flex-1 border-0 bg-transparent p-0 font-syne text-lg font-bold text-white outline-none"
+                                    className="min-w-0 flex-1 border-0 bg-transparent p-0 font-p-display text-lg font-bold text-p-fg outline-none"
                                     aria-label="Name des Sparziels"
                                 />
-                                <span className="font-mono text-xs text-neutral-500">
+                                <span className="font-p-mono text-xs text-p-muted">
                                     {formatEur(Math.max(0, saved))} /{' '}
                                     <input
                                         type="number"
                                         value={goal.target}
                                         onChange={(e) => setState((s) => ({ ...s, goal: { ...s.goal, target: Math.max(1, Number(e.target.value) || 1) } }))}
-                                        className="w-16 border-0 bg-transparent p-0 font-mono text-xs text-neutral-300 outline-none"
+                                        className="w-16 border-0 bg-transparent p-0 font-p-mono text-xs text-p-fg/80 outline-none"
                                         aria-label="Zielbetrag"
                                     /> €
                                 </span>
                             </div>
-                            <div className="h-2.5 overflow-hidden rounded-full bg-white/[0.06]">
+                            <div className="h-2.5 overflow-hidden rounded-full bg-p-fg/[0.06]">
                                 <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${Math.min(100, Math.max(0, saved / goal.target) * 100)}%`, background: ACCENT }} />
                             </div>
-                            <p className="m-0 mt-2 font-mono text-[10px] uppercase tracking-wider text-neutral-600">
+                            <p className="m-0 mt-2 font-p-mono text-[10px] uppercase tracking-wider text-p-subtle">
                                 {saved >= goal.target ? 'Ziel erreicht' : `noch ${formatEur(goal.target - Math.max(0, saved))}`}
                             </p>
                         </section>
@@ -311,7 +316,7 @@ export default function FinanceTracker() {
                     <section className={`${panel} lg:col-span-5`}>
                         <p className={label}>Cashflow · 6 Monate</p>
                         <MonthBars months={history} />
-                        <div className="mt-2 flex gap-4 font-mono text-[10px] uppercase tracking-wider text-neutral-500">
+                        <div className="mt-2 flex gap-4 font-p-mono text-[10px] uppercase tracking-wider text-p-muted">
                             <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#34d399]" />Einnahmen</span>
                             <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#f472b6]" />Ausgaben</span>
                         </div>
@@ -330,30 +335,30 @@ export default function FinanceTracker() {
                                 {formCategories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
                             </select>
                             <input type="date" value={form.date} onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))} className={input} />
-                            <button type="submit" className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 font-mono text-xs font-semibold text-black" style={{ background: ACCENT }}>
+                            <button type="submit" className="inline-flex items-center justify-center gap-1.5 rounded-p-sm px-3 py-2 font-p-mono text-xs font-semibold text-p-ink" style={{ background: ACCENT }}>
                                 <FiPlus /> Buchen
                             </button>
                         </form>
 
                         <div className="mb-3 flex items-center justify-between gap-3">
-                            <p className="m-0 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-600">{visibleTx.length} Buchungen</p>
+                            <p className="m-0 font-p-mono text-[10px] font-semibold uppercase tracking-wider text-p-subtle">{visibleTx.length} Buchungen</p>
                             <input placeholder="Suchen…" value={query} onChange={(e) => setQuery(e.target.value)} className={`${input} w-40`} />
                         </div>
                         <ul className="m-0 max-h-[340px] list-none overflow-auto p-0">
                             {visibleTx.map((t) => {
                                 const c = categoryById(t.category);
                                 return (
-                                    <li key={t.id} className="group flex items-center gap-3 border-b border-white/[0.04] py-2.5">
-                                        <span className="w-12 shrink-0 font-mono text-[11px] text-neutral-600">{t.date.slice(8)}.{t.date.slice(5, 7)}.</span>
+                                    <li key={t.id} className="group flex items-center gap-3 border-b border-p-fg/[0.04] py-2.5">
+                                        <span className="w-12 shrink-0 font-p-mono text-[11px] text-p-subtle">{t.date.slice(8)}.{t.date.slice(5, 7)}.</span>
                                         <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: c.color }} />
                                         <span className="min-w-0 flex-1">
-                                            <span className="block truncate text-sm text-neutral-200">{t.description}</span>
-                                            <span className="block font-mono text-[10px] uppercase tracking-wider text-neutral-600">{c.label}</span>
+                                            <span className="block truncate text-sm text-p-fg/80">{t.description}</span>
+                                            <span className="block font-p-mono text-[10px] uppercase tracking-wider text-p-subtle">{c.label}</span>
                                         </span>
-                                        <span className={`font-mono text-sm ${t.type === 'in' ? 'text-[#34d399]' : 'text-neutral-300'}`}>
+                                        <span className={`font-p-mono text-sm ${t.type === 'in' ? 'text-[#059669]' : 'text-p-fg/80'}`}>
                                             {t.type === 'in' ? '+' : '−'}{formatEur(t.amount)}
                                         </span>
-                                        <button type="button" onClick={() => removeTransaction(t.id)} className="text-neutral-700 opacity-0 transition-opacity hover:text-red-400 group-hover:opacity-100 focus:opacity-100" aria-label="Buchung löschen">
+                                        <button type="button" onClick={() => removeTransaction(t.id)} className="text-p-subtle opacity-0 transition-opacity hover:text-red-400 group-hover:opacity-100 focus:opacity-100" aria-label="Buchung löschen">
                                             <FiTrash2 />
                                         </button>
                                     </li>

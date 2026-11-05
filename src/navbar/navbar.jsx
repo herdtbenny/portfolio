@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 const ACTIVE_SECTION_OFFSET_RATIO = 0.35;
 
@@ -12,7 +11,15 @@ const navItems = [
     { label: 'Kontakt', id: 'kontakt' },
 ];
 
-const glassStyle = {
+const glassStyleLight = {
+    background: 'rgba(243,237,226,0.72)',
+    backdropFilter: 'blur(24px) saturate(140%)',
+    WebkitBackdropFilter: 'blur(24px) saturate(140%)',
+    border: '1px solid rgba(29,27,24,0.08)',
+    boxShadow: '0 8px 32px rgba(29, 27, 24, 0.08)',
+};
+
+const glassStyleDark = {
     background: 'rgba(255,255,255,0.03)',
     backdropFilter: 'blur(40px) saturate(160%)',
     WebkitBackdropFilter: 'blur(40px) saturate(160%)',
@@ -23,7 +30,14 @@ const glassStyle = {
   `,
 };
 
-function NavBtn({ item, active, onClick, mobile = false }) {
+// text colors per background: over the hero video vs. on the cream content
+const NAV_COLORS = {
+    dark: { active: '#F2F2F0', idle: 'rgba(255,255,255,0.45)', hover: 'rgba(255,255,255,0.85)', activeBg: 'linear-gradient(135deg, rgba(242,242,240,0.12), rgba(242,242,240,0.06))' },
+    light: { active: '#1d1b18', idle: 'rgba(29,27,24,0.5)', hover: 'rgba(29,27,24,0.85)', activeBg: 'rgba(29,27,24,0.07)' },
+};
+
+function NavBtn({ item, active, onClick, mobile = false, light = false }) {
+    const c = light ? NAV_COLORS.light : NAV_COLORS.dark;
     return (
         <button
             onClick={onClick}
@@ -33,13 +47,11 @@ function NavBtn({ item, active, onClick, mobile = false }) {
                     : 'rounded-full px-3.5 py-2 text-xs font-medium tracking-wide transition-[color,background,transform] duration-200 ease-out active:scale-[0.95] lg:px-5 lg:text-sm'
             }
             style={{
-                color: active ? '#F2F2F0' : 'rgba(255,255,255,0.45)',
-                background: active
-                    ? 'linear-gradient(135deg, rgba(242,242,240,0.12), rgba(242,242,240,0.06))'
-                    : 'transparent',
+                color: active ? c.active : c.idle,
+                background: active ? c.activeBg : 'transparent',
             }}
-            onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}
-            onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = active ? '#F2F2F0' : 'rgba(255,255,255,0.45)'; }}
+            onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = c.hover; }}
+            onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = c.idle; }}
         >
             {item.label}
         </button>
@@ -50,6 +62,8 @@ function Navbar({ scrollTo }) {
     const [mounted, setMounted] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('hero');
+    // switches to the light glass once the hero video has scrolled away
+    const [light, setLight] = useState(false);
 
     useEffect(() => {
         const raf = requestAnimationFrame(() => setMounted(true));
@@ -70,6 +84,9 @@ function Navbar({ scrollTo }) {
                     }
                 }
                 setActiveSection(current);
+                // the cream starts where the about section begins, after the fade band
+                const about = document.getElementById('about');
+                setLight(about ? about.getBoundingClientRect().top < window.innerHeight * 0.25 : false);
 
                 raf = null;
             });
@@ -103,8 +120,8 @@ function Navbar({ scrollTo }) {
     return (
         <>
             {/* Desktop pill nav */}
-            <nav className="fixed left-1/2 top-5 z-50 hidden w-auto whitespace-nowrap font-syne md:block" style={navEntranceStyle}>
-                <div className="relative flex flex-col overflow-hidden rounded-[2rem]" style={glassStyle}>
+            <nav className="fixed left-1/2 top-5 z-50 hidden w-auto whitespace-nowrap font-inter md:block" style={navEntranceStyle}>
+                <div className="relative flex flex-col overflow-hidden rounded-[2rem]" style={light ? glassStyleLight : glassStyleDark}>
 
                     {/* Specular top-edge gloss */}
                     <div
@@ -115,17 +132,9 @@ function Navbar({ scrollTo }) {
                     <ul className="m-0 flex list-none items-center justify-center gap-1 px-2 py-2 lg:gap-3">
                         {navItems.map((item) => (
                             <li key={item.id}>
-                                <NavBtn item={item} active={activeSection === item.id} onClick={() => scrollTo(item.id)} />
+                                <NavBtn item={item} light={light} active={activeSection === item.id} onClick={() => scrollTo(item.id)} />
                             </li>
                         ))}
-                        <li>
-                            <Link
-                                to="/aufschluesselung"
-                                className="block rounded-full bg-white px-3.5 py-2 text-xs font-semibold tracking-wide text-black no-underline transition-[background,transform] duration-200 ease-out hover:bg-accent active:scale-[0.95] lg:px-5 lg:text-sm"
-                            >
-                                Für Recruiter
-                            </Link>
-                        </li>
                     </ul>
                 </div>
             </nav>
@@ -136,8 +145,8 @@ function Navbar({ scrollTo }) {
                     onClick={() => setMobileOpen((v) => !v)}
                     aria-label={mobileOpen ? 'Menü schließen' : 'Menü öffnen'}
                     aria-expanded={mobileOpen}
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-white/80 transition-[color,transform] duration-150 ease-out hover:text-white active:scale-90"
-                    style={glassStyle}
+                    className={`flex h-10 w-10 items-center justify-center rounded-full transition-[color,transform] duration-150 ease-out active:scale-90 ${light ? 'text-ink/80 hover:text-ink' : 'text-white/80 hover:text-white'}`}
+                    style={light ? glassStyleLight : glassStyleDark}
                 >
                     {mobileOpen ? (
                         <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -156,21 +165,15 @@ function Navbar({ scrollTo }) {
 
             {/* Mobile dropdown — full width, under the hamburger */}
             <div
-                className={`fixed inset-x-5 top-[76px] z-40 overflow-hidden rounded-[1.75rem] font-syne transition-all duration-300 ease-out md:hidden ${
+                className={`fixed inset-x-5 top-[76px] z-40 overflow-hidden rounded-[1.75rem] font-inter transition-all duration-300 ease-out md:hidden ${
                     mobileOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
                 }`}
-                style={glassStyle}
+                style={light ? glassStyleLight : glassStyleDark}
             >
                 <div className="flex flex-col items-center gap-1 p-3">
                     {navItems.map((item) => (
-                        <NavBtn key={item.id} item={item} active={activeSection === item.id} onClick={() => handleScrollTo(item.id)} mobile />
+                        <NavBtn key={item.id} item={item} light={light} active={activeSection === item.id} onClick={() => handleScrollTo(item.id)} mobile />
                     ))}
-                    <Link
-                        to="/aufschluesselung"
-                        className="mt-1 w-full rounded-2xl bg-white px-5 py-3.5 text-center text-base font-semibold tracking-wide text-black no-underline active:scale-[0.97]"
-                    >
-                        Für Recruiter
-                    </Link>
                 </div>
             </div>
         </>

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { FiAlertTriangle, FiCheck, FiLock, FiLogOut, FiSend, FiX } from 'react-icons/fi';
 import ProjectHeader from '../../components/projectHeader';
 import { signJwt, verifyJwt, decodePart, tamperPayload } from './jwt';
+import useProjectTheme from '../../components/useProjectTheme';
 
 const ACCENT = '#a78bfa';
 const SECRET = 'demo-secret-nur-im-browser';
@@ -41,8 +42,8 @@ const ENDPOINTS = [
     { id: 'delete-user', method: 'DELETE', path: '/api/users/u4', permission: 'users:manage' },
 ];
 
-const panel = 'rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-5';
-const label = 'm-0 mb-3 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-600';
+const panel = 'rounded-p border border-p-fg/[0.06] bg-p-panel p-5';
+const label = 'm-0 mb-3 font-p-mono text-[10px] font-semibold uppercase tracking-wider text-p-subtle';
 const METHOD_COLOR = { GET: '#34d399', POST: '#8fb0ff', DELETE: '#f87171' };
 
 // the same checks an Express/Spring middleware would run, in the same order
@@ -76,13 +77,14 @@ async function authorize(token, endpoint, matrix) {
 function TokenView({ token }) {
     const [h, p, s] = token.split('.');
     return (
-        <p className="m-0 break-all rounded-lg bg-black p-3 font-mono text-[11px] leading-relaxed">
-            <span className="text-[#f472b6]">{h}</span>.<span className="text-[#a78bfa]">{p}</span>.<span className="text-[#22d3ee]">{s}</span>
+        <p className="m-0 break-all rounded-p-sm bg-p-bg p-3 font-p-mono text-[11px] leading-relaxed">
+            <span className="text-[#f472b6]">{h}</span>.<span className="text-p-accent">{p}</span>.<span className="text-p-accent">{s}</span>
         </p>
     );
 }
 
 export default function RbacPlayground() {
+    const themeClass = useProjectTheme('rbac');
     const [matrix, setMatrix] = useState(DEFAULT_MATRIX);
     const [user, setUser] = useState(null);
     const [token, setToken] = useState('');
@@ -128,13 +130,16 @@ export default function RbacPlayground() {
     };
 
     return (
-        <div className="min-h-screen bg-[#000000] font-['DM_Sans',_system-ui,_sans-serif] text-white">
-            <ProjectHeader title="Auth & Rollen-System" subtitle="JWT · RBAC · Middleware" accent={ACCENT} icon={<FiLock />} caseStudyId="rbac" />
+        <div
+            className={`min-h-screen bg-p-bg font-p-body text-p-fg ${themeClass}`}
+            style={{ backgroundImage: 'linear-gradient(rgb(var(--p-fg) / 0.03) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--p-fg) / 0.03) 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        >
+            <ProjectHeader title="Auth & Rollen-System" subtitle="JWT · RBAC · Middleware" accent={ACCENT} icon={<FiLock />} />
 
             <main className="mx-auto max-w-[1400px] px-4 py-6 sm:px-8 sm:py-8">
                 <div className="mb-6">
-                    <h1 className="m-0 font-syne text-2xl font-extrabold tracking-tight sm:text-3xl">Wer darf was – und warum?</h1>
-                    <p className="m-0 mt-2 max-w-[70ch] text-sm leading-relaxed text-neutral-400">
+                    <h1 className="m-0 font-p-display text-2xl font-semibold tracking-tight sm:text-3xl"><span className="mr-2 font-p-mono text-p-accent">&gt;_</span>Wer darf was – und warum?</h1>
+                    <p className="m-0 mt-2 max-w-[70ch] text-sm leading-relaxed text-p-muted">
                         Rollenbasierte Zugriffskontrolle für eine Vereins-App mit Admins, Trainern und Spielern. Melde dich als Nutzer an, schicke
                         Requests an die API und sieh Schritt für Schritt, wie die Middleware entscheidet. Die Tokens sind echte, per Web Crypto signierte HS256-JWTs.
                     </p>
@@ -150,46 +155,46 @@ export default function RbacPlayground() {
                                     key={u.id}
                                     type="button"
                                     onClick={() => login(u)}
-                                    className={`rounded-xl border px-3 py-2.5 text-left transition-colors ${user?.id === u.id ? 'border-[#a78bfa] bg-[#a78bfa]/10' : 'border-white/[0.08] hover:border-white/20'}`}
+                                    className={`rounded-p-sm border px-3 py-2.5 text-left transition-colors ${user?.id === u.id ? 'border-p-accent bg-p-accent/10' : 'border-p-fg/[0.08] hover:border-p-fg/20'}`}
                                 >
-                                    <span className="block text-sm font-semibold text-white">{u.name}</span>
-                                    <span className="block font-mono text-[10px] uppercase tracking-wider text-neutral-500">{ROLE_LABEL[u.role]} · {u.id}</span>
+                                    <span className="block text-sm font-semibold text-p-fg">{u.name}</span>
+                                    <span className="block font-p-mono text-[10px] uppercase tracking-wider text-p-muted">{ROLE_LABEL[u.role]} · {u.id}</span>
                                 </button>
                             ))}
                         </div>
 
                         {token ? (
                             <>
-                                <div className="mb-2 flex items-center justify-between font-mono text-[10px] uppercase tracking-wider">
-                                    <span className="text-neutral-500">Access Token</span>
-                                    <span className={secondsLeft ? 'text-neutral-400' : 'text-red-400'}>
+                                <div className="mb-2 flex items-center justify-between font-p-mono text-[10px] uppercase tracking-wider">
+                                    <span className="text-p-muted">Access Token</span>
+                                    <span className={secondsLeft ? 'text-p-muted' : 'text-red-400'}>
                                         {secondsLeft ? `läuft ab in ${secondsLeft}s` : 'abgelaufen'}
                                     </span>
                                 </div>
                                 <TokenView token={token} />
-                                <pre className="m-0 mt-3 overflow-auto rounded-lg bg-black p-3 font-mono text-[11px] leading-relaxed text-neutral-300">
+                                <pre className="m-0 mt-3 overflow-auto rounded-p-sm bg-p-bg p-3 font-p-mono text-[11px] leading-relaxed text-p-fg/80">
                                     {JSON.stringify(claims, null, 2)}
                                 </pre>
                                 {tampered && (
-                                    <p className="m-0 mt-3 flex items-start gap-2 rounded-lg border border-amber-400/20 bg-amber-400/[0.06] p-3 text-xs leading-relaxed text-amber-300">
+                                    <p className="m-0 mt-3 flex items-start gap-2 rounded-p-sm border border-amber-400/20 bg-amber-400/[0.06] p-3 text-xs leading-relaxed text-amber-300">
                                         <FiAlertTriangle className="mt-0.5 shrink-0" />
                                         Payload auf role: "admin" geändert, Signatur aber unverändert. Schick jetzt einen Request – der Server erkennt die Manipulation.
                                     </p>
                                 )}
                                 <div className="mt-4 flex flex-wrap gap-2">
-                                    <button type="button" onClick={escalate} disabled={tampered} className="rounded-full border border-amber-400/30 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-wider text-amber-300 transition-colors hover:bg-amber-400/10 disabled:opacity-40">
+                                    <button type="button" onClick={escalate} disabled={tampered} className="rounded-full border border-amber-400/30 px-3.5 py-1.5 font-p-mono text-[11px] uppercase tracking-wider text-amber-300 transition-colors hover:bg-amber-400/10 disabled:opacity-40">
                                         Rolle fälschen
                                     </button>
-                                    <button type="button" onClick={() => login(user, -1)} className="rounded-full border border-white/10 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-wider text-neutral-300 transition-colors hover:border-white/25">
+                                    <button type="button" onClick={() => login(user, -1)} className="rounded-full border border-p-fg/10 px-3.5 py-1.5 font-p-mono text-[11px] uppercase tracking-wider text-p-fg/80 transition-colors hover:border-p-fg/25">
                                         Abgelaufenes Token
                                     </button>
-                                    <button type="button" onClick={logout} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-wider text-neutral-300 transition-colors hover:border-white/25">
+                                    <button type="button" onClick={logout} className="inline-flex items-center gap-1.5 rounded-full border border-p-fg/10 px-3.5 py-1.5 font-p-mono text-[11px] uppercase tracking-wider text-p-fg/80 transition-colors hover:border-p-fg/25">
                                         <FiLogOut /> Logout
                                     </button>
                                 </div>
                             </>
                         ) : (
-                            <p className="m-0 text-sm text-neutral-500">Nicht angemeldet – Requests gehen ohne Token raus.</p>
+                            <p className="m-0 text-sm text-p-muted">Nicht angemeldet – Requests gehen ohne Token raus.</p>
                         )}
                     </section>
 
@@ -198,11 +203,11 @@ export default function RbacPlayground() {
                         <p className={label}>2 · Requests senden</p>
                         <ul className="m-0 mb-5 flex list-none flex-col gap-2 p-0">
                             {ENDPOINTS.map((e) => (
-                                <li key={e.id} className="flex items-center gap-3 rounded-xl border border-white/[0.06] px-3 py-2.5">
-                                    <span className="w-14 shrink-0 font-mono text-[11px] font-semibold" style={{ color: METHOD_COLOR[e.method] }}>{e.method}</span>
-                                    <span className="min-w-0 flex-1 truncate font-mono text-xs text-neutral-200">{e.path}</span>
-                                    <span className="hidden font-mono text-[10px] text-neutral-600 sm:inline">{e.permission}</span>
-                                    <button type="button" disabled={busy} onClick={() => send(e)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-white/[0.06] hover:text-white" aria-label={`${e.method} ${e.path} senden`}>
+                                <li key={e.id} className="flex items-center gap-3 rounded-p-sm border border-p-fg/[0.06] px-3 py-2.5">
+                                    <span className="w-14 shrink-0 font-p-mono text-[11px] font-semibold" style={{ color: METHOD_COLOR[e.method] }}>{e.method}</span>
+                                    <span className="min-w-0 flex-1 truncate font-p-mono text-xs text-p-fg/80">{e.path}</span>
+                                    <span className="hidden font-p-mono text-[10px] text-p-subtle sm:inline">{e.permission}</span>
+                                    <button type="button" disabled={busy} onClick={() => send(e)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-p-sm text-p-muted transition-colors hover:bg-p-fg/[0.06] hover:text-p-fg" aria-label={`${e.method} ${e.path} senden`}>
                                         <FiSend />
                                     </button>
                                 </li>
@@ -213,16 +218,16 @@ export default function RbacPlayground() {
                         {log.length ? (
                             <ul className="m-0 flex max-h-[300px] list-none flex-col gap-2 overflow-auto p-0">
                                 {log.map((entry) => (
-                                    <li key={entry.id} className="animate-slideUp rounded-xl bg-black p-3">
-                                        <div className="mb-1.5 flex items-center gap-3 font-mono text-[11px]">
+                                    <li key={entry.id} className="animate-slideUp rounded-p-sm bg-p-bg p-3">
+                                        <div className="mb-1.5 flex items-center gap-3 font-p-mono text-[11px]">
                                             <span className={`rounded px-1.5 py-0.5 font-semibold ${entry.status === 200 ? 'bg-emerald-400/15 text-emerald-300' : entry.status === 401 ? 'bg-amber-400/15 text-amber-300' : 'bg-red-400/15 text-red-300'}`}>
                                                 {entry.status}
                                             </span>
-                                            <span className="text-neutral-300">{entry.endpoint.method} {entry.endpoint.path}</span>
-                                            <span className="ml-auto text-neutral-600">{entry.at}</span>
+                                            <span className="text-p-fg/80">{entry.endpoint.method} {entry.endpoint.path}</span>
+                                            <span className="ml-auto text-p-subtle">{entry.at}</span>
                                         </div>
                                         {entry.trace.map((t, i) => (
-                                            <p key={i} className={`m-0 flex items-center gap-2 font-mono text-[11px] ${t.ok ? 'text-neutral-400' : 'text-red-300'}`}>
+                                            <p key={i} className={`m-0 flex items-center gap-2 font-p-mono text-[11px] ${t.ok ? 'text-p-muted' : 'text-red-300'}`}>
                                                 {t.ok ? <FiCheck className="text-emerald-400" /> : <FiX />} {t.text}
                                             </p>
                                         ))}
@@ -230,43 +235,43 @@ export default function RbacPlayground() {
                                 ))}
                             </ul>
                         ) : (
-                            <p className="m-0 text-sm text-neutral-500">Noch keine Requests.</p>
+                            <p className="m-0 text-sm text-p-muted">Noch keine Requests.</p>
                         )}
                     </section>
 
                     {/* MATRIX */}
                     <section className={`${panel} lg:col-span-12`}>
                         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-                            <p className="m-0 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-600">3 · Berechtigungsmatrix – live editierbar</p>
-                            <button type="button" onClick={() => setMatrix(DEFAULT_MATRIX)} className="font-mono text-[11px] uppercase tracking-wider text-neutral-500 hover:text-white">Zurücksetzen</button>
+                            <p className="m-0 font-p-mono text-[10px] font-semibold uppercase tracking-wider text-p-subtle">3 · Berechtigungsmatrix – live editierbar</p>
+                            <button type="button" onClick={() => setMatrix(DEFAULT_MATRIX)} className="font-p-mono text-[11px] uppercase tracking-wider text-p-muted hover:text-p-fg">Zurücksetzen</button>
                         </div>
                         <div className="overflow-x-auto">
-                            <table className="w-full border-collapse font-mono text-xs">
+                            <table className="w-full border-collapse font-p-mono text-xs">
                                 <thead>
                                     <tr>
-                                        <th className="border-b border-white/[0.06] px-3 py-2 text-left text-[10px] font-medium uppercase tracking-wider text-neutral-600">Permission</th>
+                                        <th className="border-b border-p-fg/[0.06] px-3 py-2 text-left text-[10px] font-medium uppercase tracking-wider text-p-subtle">Permission</th>
                                         {ROLES.map((r) => (
-                                            <th key={r} className="border-b border-white/[0.06] px-3 py-2 text-center text-[10px] font-medium uppercase tracking-wider" style={{ color: ACCENT }}>{ROLE_LABEL[r]}</th>
+                                            <th key={r} className="border-b border-p-fg/[0.06] px-3 py-2 text-center text-[10px] font-medium uppercase tracking-wider" style={{ color: ACCENT }}>{ROLE_LABEL[r]}</th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {PERMISSIONS.map((p) => (
                                         <tr key={p.id}>
-                                            <td className="border-b border-white/[0.04] px-3 py-2.5">
-                                                <span className="text-neutral-200">{p.id}</span>
-                                                <span className="ml-3 hidden text-neutral-600 sm:inline">{p.label}</span>
+                                            <td className="border-b border-p-fg/[0.04] px-3 py-2.5">
+                                                <span className="text-p-fg/80">{p.id}</span>
+                                                <span className="ml-3 hidden text-p-subtle sm:inline">{p.label}</span>
                                             </td>
                                             {ROLES.map((r) => {
                                                 const on = matrix[r].includes(p.id);
                                                 return (
-                                                    <td key={r} className="border-b border-white/[0.04] px-3 py-2.5 text-center">
+                                                    <td key={r} className="border-b border-p-fg/[0.04] px-3 py-2.5 text-center">
                                                         <button
                                                             type="button"
                                                             onClick={() => togglePermission(r, p.id)}
                                                             aria-pressed={on}
                                                             aria-label={`${p.id} für ${ROLE_LABEL[r]}`}
-                                                            className={`inline-flex h-6 w-6 items-center justify-center rounded-md border transition-colors ${on ? 'border-[#a78bfa] bg-[#a78bfa]/20 text-[#a78bfa]' : 'border-white/10 text-transparent hover:border-white/25'}`}
+                                                            className={`inline-flex h-6 w-6 items-center justify-center rounded-md border transition-colors ${on ? 'border-p-accent bg-p-accent/20 text-p-accent' : 'border-p-fg/10 text-transparent hover:border-p-fg/25'}`}
                                                         >
                                                             <FiCheck />
                                                         </button>
@@ -278,7 +283,7 @@ export default function RbacPlayground() {
                                 </tbody>
                             </table>
                         </div>
-                        <p className="m-0 mt-4 max-w-[80ch] text-xs leading-relaxed text-neutral-500">
+                        <p className="m-0 mt-4 max-w-[80ch] text-xs leading-relaxed text-p-muted">
                             Die Rolle steckt signiert im Token, die Rechte pro Rolle liegen serverseitig. So lassen sich Berechtigungen ändern,
                             ohne dass Nutzer sich neu anmelden müssen – und ein manipuliertes Token fällt an der Signaturprüfung durch, bevor überhaupt eine Rolle gelesen wird.
                         </p>

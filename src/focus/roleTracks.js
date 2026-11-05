@@ -1,5 +1,5 @@
-// The job profiles this portfolio is built to support. Used by the <Focus>
-// section on the home page and the role filter on /aufschluesselung.
+// The job profiles this portfolio is built to support, shown in the <Focus>
+// section on the home page.
 
 export const ROLE_TRACKS = [
     {
@@ -11,6 +11,7 @@ export const ROLE_TRACKS = [
             'Im Job: Softwarelösungen für Fußballdatenanalyse bei IMPECT',
             'React, TypeScript, Angular, Java im Einsatz',
             'Eigene Auth-Implementierung mit signierten JWTs',
+            'Agentic Coding mit Claude Code: eigene Skills, Reviews, Automatisierung',
         ],
     },
     {
@@ -31,6 +32,7 @@ export const ROLE_TRACKS = [
         pitch: 'Als Wirtschaftsinformatiker denke ich vom Problem des Kunden her – und habe mit meiner eigenen Agentur gelernt, Anforderungen in Ergebnisse zu übersetzen.',
         proof: [
             'Eigene Agentur: Akquise, Anforderungen, Umsetzung, Betrieb',
+            'Demo-Pipeline per Claude-Code-Skill automatisiert: von der Bestandsseite zur Live-Demo',
             'Bachelor Wirtschaftsinformatik an der OTH Regensburg',
             'Controlling-Logik und KPI-Design im Finanz-Dashboard',
         ],

@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  background-color: #000000;
+  background-color: #f3ede2;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -12,4 +12,75 @@ body {
 .noise-overlay {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px 200px;
+}
+
+/* ---- Project themes: every standalone project page has its own identity ----
+   Colors are RGB triplets so Tailwind's opacity modifiers work (bg-p-fg/10 etc.). */
+
+/* xG Lab: TV match-analysis look, pitch green and amber, condensed sports type, sharp corners */
+.theme-xg {
+  --p-bg: 7 16 11;
+  --p-panel: 12 26 18;
+  --p-fg: 236 244 238;
+  --p-muted: 148 170 156;
+  --p-subtle: 92 116 101;
+  --p-accent: 245 165 36;
+  --p-ink: 7 16 11;
+  --p-font-display: 'Barlow Condensed', sans-serif;
+  --p-font-body: 'Barlow', sans-serif;
+  --p-font-mono: 'JetBrains Mono', monospace;
+  --p-radius: 4px;
+  --p-radius-sm: 2px;
+  --p-shadow: none;
+}
+
+/* Finanz Tracker: light fintech dashboard, white cards with soft shadows, rounded */
+.theme-finance {
+  --p-bg: 241 244 249;
+  --p-panel: 255 255 255;
+  --p-fg: 15 23 42;
+  --p-muted: 71 85 105;
+  --p-subtle: 148 163 184;
+  --p-accent: 13 148 136;
+  --p-ink: 255 255 255;
+  --p-font-display: 'Manrope', sans-serif;
+  --p-font-body: 'Manrope', sans-serif;
+  --p-font-mono: 'IBM Plex Mono', monospace;
+  --p-radius: 20px;
+  --p-radius-sm: 12px;
+  --p-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -8px rgb(15 23 42 / 0.10);
+}
+
+/* Auth & Rollen: security console, violet on near-black, monospace-first, square edges */
+.theme-rbac {
+  --p-bg: 9 9 14;
+  --p-panel: 16 15 26;
+  --p-fg: 226 228 240;
+  --p-muted: 150 150 180;
+  --p-subtle: 92 92 122;
+  --p-accent: 167 139 250;
+  --p-ink: 9 9 14;
+  --p-font-display: 'Space Grotesk', sans-serif;
+  --p-font-body: 'IBM Plex Sans', sans-serif;
+  --p-font-mono: 'JetBrains Mono', monospace;
+  --p-radius: 0px;
+  --p-radius-sm: 0px;
+  --p-shadow: none;
+}
+
+/* Sport Scorings: stadium night, deep navy with floodlight lime, bold scoreboard type */
+.theme-sport {
+  --p-bg: 10 16 34;
+  --p-panel: 17 26 50;
+  --p-fg: 240 244 255;
+  --p-muted: 160 172 204;
+  --p-subtle: 98 110 145;
+  --p-accent: 198 244 50;
+  --p-ink: 10 16 34;
+  --p-font-display: 'Bebas Neue', sans-serif;
+  --p-font-body: 'Archivo', sans-serif;
+  --p-font-mono: 'Roboto Mono', monospace;
+  --p-radius: 14px;
+  --p-radius-sm: 8px;
+  --p-shadow: none;
 }

@@ -30,13 +30,13 @@ function Cover({ project }) {
                 backgroundSize: '100% 100%, 32px 32px, 32px 32px',
             }}
         >
-            <span className="font-syne text-[7rem] font-extrabold leading-none sm:text-[9rem]" style={{ color: project.accent }}>
+            <span className="font-serif text-[7rem] font-medium leading-none sm:text-[9rem]" style={{ color: project.accent }}>
                 {project.cover}
             </span>
-            <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-500">
+            <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-[0.18em] text-stone-500">
                 {project.kind}
             </span>
-            <span className="absolute bottom-4 right-5 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-500">
+            <span className="absolute bottom-4 right-5 font-mono text-[10px] uppercase tracking-[0.18em] text-stone-500">
                 Interaktiv
             </span>
         </div>
@@ -51,7 +51,7 @@ function Shot({ project, inView }) {
                 className="pointer-events-none absolute -inset-6 -z-10 opacity-40 blur-3xl transition-opacity duration-500 group-hover:opacity-70"
                 style={{ background: `radial-gradient(60% 60% at 50% 50%, ${project.accent}55, transparent 70%)` }}
             />
-            <div className="overflow-hidden rounded-[6px] ring-1 ring-white/10">
+            <div className="overflow-hidden rounded-[6px] ring-1 ring-ink/10">
                 {project.image ? (
                     <img
                         src={project.image}
@@ -87,18 +87,18 @@ function ProjectSpread({ project, index }) {
     const number = String(index + 1).padStart(2, '0');
 
     return (
-        <article ref={ref} className="border-t border-white/10 pt-6 sm:pt-8">
+        <article ref={ref} className="border-t border-ink/10 pt-6 sm:pt-8">
             {/* meta row */}
             <div
-                className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-neutral-500 sm:mb-8"
+                className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500 sm:mb-8"
                 style={fadeUp(inView)}
             >
-                <span className="text-white">{number}</span>
-                <span className="h-px w-8 bg-white/20" />
+                <span className="text-ink">{number}</span>
+                <span className="h-px w-8 bg-ink/20" />
                 <span>{project.kind}</span>
-                <span className="text-neutral-700">/</span>
+                <span className="text-stone-400">/</span>
                 <span>{project.period}</span>
-                <span className="ml-auto inline-flex items-center gap-2 text-neutral-400">
+                <span className="ml-auto inline-flex items-center gap-2 text-stone-600">
                     <span
                         className={`h-1.5 w-1.5 rounded-full ${project.status === 'Live' ? 'animate-pulse motion-reduce:animate-none' : ''}`}
                         style={{ backgroundColor: project.accent }}
@@ -109,23 +109,23 @@ function ProjectSpread({ project, index }) {
 
             <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
                 <div className={`lg:col-span-6 ${flipped ? 'lg:order-2' : ''}`}>
-                    <h3 className="m-0 mb-4 text-3xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-4xl">
+                    <h3 className="m-0 mb-4 text-3xl font-medium leading-[0.95] tracking-tight text-ink sm:text-4xl">
                         <RevealLine inView={inView} delay={60}>{project.title}</RevealLine>
                     </h3>
 
                     <div style={fadeUp(inView, 0.1)}>
-                        <p className="m-0 mb-5 max-w-[46ch] font-inter text-sm leading-relaxed text-neutral-400">
+                        <p className="m-0 mb-5 max-w-[46ch] font-inter text-sm leading-relaxed text-stone-600">
                             {project.summary}
                         </p>
 
-                        <ul className="m-0 mb-7 flex max-w-[52ch] list-none flex-wrap gap-x-4 gap-y-1.5 p-0 font-mono text-[11px] uppercase tracking-[0.12em] text-neutral-500">
+                        <ul className="m-0 mb-7 flex max-w-[52ch] list-none flex-wrap gap-x-4 gap-y-1.5 p-0 font-mono text-[11px] uppercase tracking-[0.12em] text-stone-500">
                             {project.skills.map((skill) => <li key={skill}>{skill}</li>)}
                         </ul>
 
                         {project.href && (
                             <ProjectLink
                                 href={project.href}
-                                className="group/link inline-flex items-center gap-3 border-b border-white/25 pb-1.5 font-inter text-sm font-semibold text-white no-underline transition-colors duration-200 hover:border-accent hover:text-accent"
+                                className="group/link inline-flex items-center gap-3 border-b border-ink/25 pb-1.5 font-inter text-sm font-semibold text-ink no-underline transition-colors duration-200 hover:border-accent-deep hover:text-accent-deep"
                             >
                                 {project.linkLabel}
                                 {project.href.startsWith('/') ? (
@@ -152,28 +152,25 @@ function Projects() {
     return (
         <section
             id="projects"
-            className="relative box-border overflow-hidden bg-[#000000] px-5 pb-20 pt-28 font-syne sm:px-12 sm:pb-28 sm:pt-32 lg:px-20 lg:pt-36"
+            className="relative box-border overflow-hidden bg-cream px-5 pb-20 pt-28 font-serif sm:px-12 sm:pb-28 sm:pt-32 lg:px-20 lg:pt-36"
         >
             <div className="pointer-events-none absolute -right-28 -top-36 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(143,176,255,0.08)_0%,transparent_70%)] sm:h-[420px] sm:w-[420px] lg:h-[520px] lg:w-[520px]" />
 
             <div className="relative mx-auto w-full max-w-[1200px]">
                 <header ref={ref} className="mb-14 flex flex-wrap items-end justify-between gap-6 sm:mb-20">
                     <div>
-                        <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent">
+                        <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent-deep">
                             <RevealLine inView={inView} delay={0}>Portfolio</RevealLine>
                         </p>
-                        <h2 className="m-0 text-3xl font-extrabold leading-none tracking-tight text-white sm:text-5xl">
+                        <h2 className="m-0 text-3xl font-medium leading-none tracking-tight text-ink sm:text-5xl">
                             <RevealLine inView={inView} delay={120}>Projekte</RevealLine>
                         </h2>
                     </div>
                     <p
-                        className="m-0 max-w-xs font-inter text-sm leading-relaxed text-neutral-500"
+                        className="m-0 max-w-xs font-inter text-sm leading-relaxed text-stone-500"
                         style={fadeUp(inView, 0.25)}
                     >
-                        Eine eigene Webagentur und vier interaktive Projekte – von Fußballdaten über Finanzen bis Security.{' '}
-                        <Link to="/aufschluesselung" className="text-neutral-300 underline decoration-white/25 underline-offset-4 transition-colors hover:text-accent">
-                            Alle Case Studies
-                        </Link>
+                        Eine eigene Webagentur, eine privat genutzte Full-Stack-App und vier interaktive Projekte – von Fußballdaten über Finanzen bis Security. Gebaut mit Claude Code.
                     </p>
                 </header>
 

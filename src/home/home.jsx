@@ -11,6 +11,10 @@ import Footer from '../footer/footer';
 
 const SCROLL_FADE_DISTANCE = 700;
 
+// eased stops instead of a linear ramp, so the fade has no visible start or end line
+const CREAM_FADE = 'linear-gradient(to bottom, rgba(243,237,226,0) 0%, rgba(243,237,226,0.06) 15%, rgba(243,237,226,0.2) 30%, rgba(243,237,226,0.42) 45%, rgba(243,237,226,0.66) 60%, rgba(243,237,226,0.86) 75%, rgba(243,237,226,0.97) 88%, #f3ede2 100%)';
+const FADE_MASK = 'linear-gradient(to bottom, transparent 0%, black 45%)';
+
 function Home() {
     const scrollTo = (id) => {
         document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
@@ -56,6 +60,15 @@ function Home() {
 
             <Navbar scrollTo={scrollTo} />
             <Hero />
+            {/* the video keeps running behind this band: it blurs out and dissolves into the cream
+                content over most of a screen height, so there is no visible edge */}
+            <div aria-hidden className="pointer-events-none relative h-[70vh]">
+                <div
+                    className="absolute inset-0 backdrop-blur-2xl"
+                    style={{ maskImage: FADE_MASK, WebkitMaskImage: FADE_MASK }}
+                />
+                <div className="absolute inset-0" style={{ background: CREAM_FADE }} />
+            </div>
             <About />
             <Focus />
             <Timeline />

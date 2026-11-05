@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { FiDownload, FiRefreshCw, FiTrash2 } from 'react-icons/fi';
 import ProjectHeader from '../../components/projectHeader';
+import useProjectTheme from '../../components/useProjectTheme';
 import {
     PITCH, GOAL, BODY_PARTS, SITUATIONS, COEFFICIENTS,
     expectedGoals, shotGeometry, sampleMatch,
@@ -14,8 +15,8 @@ const TEAMS = {
 const HEAT_CELL = 2;
 const BIG_CHANCE = 0.25;
 
-const label = 'm-0 mb-2.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-600';
-const panel = 'rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-5';
+const label = 'm-0 mb-2.5 font-p-mono text-[10px] font-semibold uppercase tracking-wider text-p-subtle';
+const panel = 'rounded-p border border-p-fg/[0.06] bg-p-panel p-5';
 
 function Segmented({ options, value, onChange, colorFor }) {
     return (
@@ -28,7 +29,7 @@ function Segmented({ options, value, onChange, colorFor }) {
                         key={o.id}
                         type="button"
                         onClick={() => onChange(o.id)}
-                        className="rounded-full px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-wider transition-colors"
+                        className="rounded-full px-3.5 py-1.5 font-p-mono text-[11px] font-medium uppercase tracking-wider transition-colors"
                         style={active ? { background: `${color}26`, color } : { color: '#737373' }}
                     >
                         {o.label}
@@ -224,6 +225,7 @@ function downloadCsv(shots) {
 }
 
 export default function XgLab() {
+    const themeClass = useProjectTheme('xg');
     const [shots, setShots] = useState(() => sampleMatch());
     const [team, setTeam] = useState('home');
     const [bodyPart, setBodyPart] = useState('foot');
@@ -269,23 +271,26 @@ export default function XgLab() {
     const removeShot = (id) => setShots((prev) => prev.filter((s) => s.id !== id));
 
     return (
-        <div className="min-h-screen bg-[#000000] font-['DM_Sans',_system-ui,_sans-serif] text-white">
-            <ProjectHeader title="xG Lab" subtitle="Expected Goals · Modell & Visualisierung" accent={ACCENT} icon="◎" caseStudyId="xglab" />
+        <div
+            className={`min-h-screen bg-p-bg font-p-body text-p-fg ${themeClass}`}
+            style={{ backgroundImage: 'repeating-linear-gradient(90deg, rgb(var(--p-fg) / 0.018) 0 80px, transparent 80px 160px)' }}
+        >
+            <ProjectHeader title="xG Lab" subtitle="Expected Goals · Modell & Visualisierung" accent={ACCENT} icon="◎" />
 
             <main className="mx-auto max-w-[1400px] px-4 py-6 sm:px-8 sm:py-8">
                 <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
                     <div>
-                        <h1 className="m-0 font-syne text-2xl font-extrabold tracking-tight sm:text-3xl">Wie gut war die Chance wirklich?</h1>
-                        <p className="m-0 mt-2 max-w-[62ch] text-sm leading-relaxed text-neutral-400">
+                        <h1 className="m-0 font-p-display text-3xl font-bold uppercase leading-none tracking-wide sm:text-4xl">Wie gut war die Chance wirklich?</h1>
+                        <p className="m-0 mt-2 max-w-[62ch] text-sm leading-relaxed text-p-muted">
                             Klick aufs Feld, um einen Schuss zu platzieren. Das Modell berechnet live die Torwahrscheinlichkeit aus
                             Distanz, Schusswinkel, Körperteil und Spielsituation. Geladen ist ein simuliertes Beispielspiel.
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <button type="button" onClick={() => { setShots(sampleMatch(Math.floor(Math.random() * 1e6))); setSelectedId(null); }} className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-neutral-300 transition-colors hover:border-white/25 hover:text-white">
+                        <button type="button" onClick={() => { setShots(sampleMatch(Math.floor(Math.random() * 1e6))); setSelectedId(null); }} className="inline-flex items-center gap-2 rounded-full border border-p-fg/10 px-4 py-2 font-p-mono text-[11px] uppercase tracking-wider text-p-fg/80 transition-colors hover:border-p-fg/25 hover:text-p-fg">
                             <FiRefreshCw /> Neues Spiel
                         </button>
-                        <button type="button" onClick={() => { setShots([]); setSelectedId(null); }} className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-neutral-300 transition-colors hover:border-white/25 hover:text-white">
+                        <button type="button" onClick={() => { setShots([]); setSelectedId(null); }} className="inline-flex items-center gap-2 rounded-full border border-p-fg/10 px-4 py-2 font-p-mono text-[11px] uppercase tracking-wider text-p-fg/80 transition-colors hover:border-p-fg/25 hover:text-p-fg">
                             <FiTrash2 /> Leeren
                         </button>
                     </div>
@@ -295,13 +300,13 @@ export default function XgLab() {
                     {/* PITCH */}
                     <section className={`${panel} relative lg:col-span-7`}>
                         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-                            <p className="m-0 font-mono text-[11px] uppercase tracking-wider text-neutral-500">
+                            <p className="m-0 font-p-mono text-[11px] uppercase tracking-wider text-p-muted">
                                 {hover
-                                    ? <>xG an dieser Position: <span className="text-white">{hover.xg.toFixed(2)}</span> · {shotGeometry(hover.x, hover.y).distance.toFixed(1)} m</>
+                                    ? <>xG an dieser Position: <span className="text-p-fg">{hover.xg.toFixed(2)}</span> · {shotGeometry(hover.x, hover.y).distance.toFixed(1)} m</>
                                     : 'Maus übers Feld bewegen'}
                             </p>
-                            <label className="flex cursor-pointer items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-neutral-400">
-                                <input type="checkbox" checked={heatmap} onChange={(e) => setHeatmap(e.target.checked)} className="accent-[#f5a524]" />
+                            <label className="flex cursor-pointer items-center gap-2 font-p-mono text-[11px] uppercase tracking-wider text-p-muted">
+                                <input type="checkbox" checked={heatmap} onChange={(e) => setHeatmap(e.target.checked)} className="accent-p-accent" />
                                 xG-Heatmap
                             </label>
                         </div>
@@ -315,7 +320,7 @@ export default function XgLab() {
                             selectedId={selectedId}
                             setSelectedId={setSelectedId}
                         />
-                        <p className="m-0 mt-3 font-mono text-[10px] uppercase tracking-wider text-neutral-600">
+                        <p className="m-0 mt-3 font-p-mono text-[10px] uppercase tracking-wider text-p-subtle">
                             Kreisgröße = xG · gefüllt = Tor
                         </p>
                     </section>
@@ -330,7 +335,7 @@ export default function XgLab() {
                                 <Segmented options={SITUATIONS} value={situation} onChange={setSituation} />
                                 <div className="flex flex-wrap items-center gap-5">
                                     <Segmented options={[{ id: false, label: 'Kein Tor' }, { id: true, label: 'Tor' }]} value={isGoal} onChange={setIsGoal} />
-                                    <label className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-neutral-500">
+                                    <label className="flex items-center gap-2 font-p-mono text-[11px] uppercase tracking-wider text-p-muted">
                                         Minute
                                         <input
                                             type="number"
@@ -338,7 +343,7 @@ export default function XgLab() {
                                             max={90}
                                             value={minute}
                                             onChange={(e) => setMinute(Math.max(1, Math.min(90, Number(e.target.value) || 1)))}
-                                            className="w-16 rounded-lg border border-white/10 bg-black px-2 py-1.5 text-white outline-none focus:border-[#f5a524]"
+                                            className="w-16 rounded-p-sm border border-p-fg/10 bg-p-bg px-2 py-1.5 text-p-fg outline-none focus:border-p-accent"
                                         />
                                     </label>
                                 </div>
@@ -346,7 +351,7 @@ export default function XgLab() {
                         </section>
 
                         <section className={panel}>
-                            <div className="mb-4 grid grid-cols-[1fr_auto_auto] gap-x-6 gap-y-2.5 font-mono text-xs">
+                            <div className="mb-4 grid grid-cols-[1fr_auto_auto] gap-x-6 gap-y-2.5 font-p-mono text-xs">
                                 <span />
                                 {Object.entries(TEAMS).map(([id, t]) => (
                                     <span key={id} className="text-right text-[10px] uppercase tracking-wider" style={{ color: t.color }}>{t.label}</span>
@@ -360,9 +365,9 @@ export default function XgLab() {
                                     ['Tore − xG', (s) => `${s.diff >= 0 ? '+' : ''}${s.diff.toFixed(2)}`],
                                 ].map(([name, fn]) => (
                                     <div key={name} className="contents">
-                                        <span className="text-neutral-500">{name}</span>
-                                        <span className="text-right text-white">{fn(stats.home)}</span>
-                                        <span className="text-right text-white">{fn(stats.away)}</span>
+                                        <span className="text-p-muted">{name}</span>
+                                        <span className="text-right text-p-fg">{fn(stats.home)}</span>
+                                        <span className="text-right text-p-fg">{fn(stats.away)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -373,7 +378,7 @@ export default function XgLab() {
                                 <div style={{ width: `${outcome.draw * 100}%`, background: '#404040' }} />
                                 <div style={{ width: `${outcome.away * 100}%`, background: TEAMS.away.color }} />
                             </div>
-                            <div className="mt-2 flex justify-between font-mono text-[11px] text-neutral-400">
+                            <div className="mt-2 flex justify-between font-p-mono text-[11px] text-p-muted">
                                 <span>Heimsieg {(outcome.home * 100).toFixed(0)} %</span>
                                 <span>Remis {(outcome.draw * 100).toFixed(0)} %</span>
                                 <span>Auswärts {(outcome.away * 100).toFixed(0)} %</span>
@@ -390,11 +395,11 @@ export default function XgLab() {
                     {/* MODEL */}
                     <section className={`${panel} lg:col-span-5`}>
                         <p className={label}>Das Modell</p>
-                        <code className="block rounded-lg bg-black px-3 py-3 font-mono text-[11px] leading-relaxed text-neutral-300">
+                        <code className="block rounded-p-sm bg-p-bg px-3 py-3 font-p-mono text-[11px] leading-relaxed text-p-fg/80">
                             xG = 1 / (1 + e<sup>−z</sup>)<br />
                             z = {COEFFICIENTS.intercept} + {COEFFICIENTS.angle}·Winkel {COEFFICIENTS.distance}·Distanz + β<sub>Körper</sub> + β<sub>Situation</sub>
                         </code>
-                        <p className="m-0 mt-3 text-xs leading-relaxed text-neutral-500">
+                        <p className="m-0 mt-3 text-xs leading-relaxed text-p-muted">
                             Logistische Regression auf zwei geometrischen Features, wie sie auch in professionellen xG-Modellen die stärksten
                             Prädiktoren sind. Die Koeffizienten sind von Hand kalibriert, nicht auf echten Eventdaten trainiert. Die Ergebnis-Wahrscheinlichkeit
                             wird exakt über die Poisson-Binomial-Verteilung der Tore berechnet, ohne Monte-Carlo.
@@ -404,17 +409,17 @@ export default function XgLab() {
                     {/* SHOT TABLE */}
                     <section className={`${panel} lg:col-span-12`}>
                         <div className="mb-3 flex items-center justify-between">
-                            <p className="m-0 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-600">{shots.length} Schüsse</p>
-                            <button type="button" onClick={() => downloadCsv(shots)} disabled={!shots.length} className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-neutral-400 transition-colors hover:text-white disabled:opacity-40">
+                            <p className="m-0 font-p-mono text-[10px] font-semibold uppercase tracking-wider text-p-subtle">{shots.length} Schüsse</p>
+                            <button type="button" onClick={() => downloadCsv(shots)} disabled={!shots.length} className="inline-flex items-center gap-2 font-p-mono text-[11px] uppercase tracking-wider text-p-muted transition-colors hover:text-p-fg disabled:opacity-40">
                                 <FiDownload /> CSV
                             </button>
                         </div>
                         <div className="max-h-[320px] overflow-auto">
-                            <table className="w-full border-collapse text-left font-mono text-xs">
-                                <thead className="sticky top-0 bg-[#0a0a0a]">
-                                    <tr className="text-[10px] uppercase tracking-wider text-neutral-600">
+                            <table className="w-full border-collapse text-left font-p-mono text-xs">
+                                <thead className="sticky top-0 bg-p-panel">
+                                    <tr className="text-[10px] uppercase tracking-wider text-p-subtle">
                                         {['Min', 'Team', 'Situation', 'Körper', 'Distanz', 'xG', 'Ergebnis', ''].map((h) => (
-                                            <th key={h} className="border-b border-white/[0.06] px-2 py-2 font-medium">{h}</th>
+                                            <th key={h} className="border-b border-p-fg/[0.06] px-2 py-2 font-medium">{h}</th>
                                         ))}
                                     </tr>
                                 </thead>
@@ -423,17 +428,17 @@ export default function XgLab() {
                                         <tr
                                             key={s.id}
                                             onClick={() => setSelectedId(s.id === selectedId ? null : s.id)}
-                                            className={`cursor-pointer transition-colors hover:bg-white/[0.03] ${s.id === selectedId ? 'bg-white/[0.05]' : ''}`}
+                                            className={`cursor-pointer transition-colors hover:bg-p-fg/[0.03] ${s.id === selectedId ? 'bg-p-fg/[0.05]' : ''}`}
                                         >
-                                            <td className="border-b border-white/[0.04] px-2 py-2 text-neutral-500">{s.minute}'</td>
-                                            <td className="border-b border-white/[0.04] px-2 py-2" style={{ color: TEAMS[s.team].color }}>{TEAMS[s.team].label}</td>
-                                            <td className="border-b border-white/[0.04] px-2 py-2 text-neutral-400">{SITUATIONS.find((x) => x.id === s.situation).label}</td>
-                                            <td className="border-b border-white/[0.04] px-2 py-2 text-neutral-400">{BODY_PARTS.find((x) => x.id === s.bodyPart).label}</td>
-                                            <td className="border-b border-white/[0.04] px-2 py-2 text-neutral-400">{shotGeometry(s.x, s.y).distance.toFixed(1)} m</td>
-                                            <td className="border-b border-white/[0.04] px-2 py-2 text-white">{expectedGoals(s).toFixed(2)}</td>
-                                            <td className="border-b border-white/[0.04] px-2 py-2">{s.goal ? <span style={{ color: TEAMS[s.team].color }}>Tor</span> : <span className="text-neutral-600">–</span>}</td>
-                                            <td className="border-b border-white/[0.04] px-2 py-2 text-right">
-                                                <button type="button" onClick={(e) => { e.stopPropagation(); removeShot(s.id); }} className="text-neutral-600 transition-colors hover:text-red-400" aria-label="Schuss entfernen">
+                                            <td className="border-b border-p-fg/[0.04] px-2 py-2 text-p-muted">{s.minute}'</td>
+                                            <td className="border-b border-p-fg/[0.04] px-2 py-2" style={{ color: TEAMS[s.team].color }}>{TEAMS[s.team].label}</td>
+                                            <td className="border-b border-p-fg/[0.04] px-2 py-2 text-p-muted">{SITUATIONS.find((x) => x.id === s.situation).label}</td>
+                                            <td className="border-b border-p-fg/[0.04] px-2 py-2 text-p-muted">{BODY_PARTS.find((x) => x.id === s.bodyPart).label}</td>
+                                            <td className="border-b border-p-fg/[0.04] px-2 py-2 text-p-muted">{shotGeometry(s.x, s.y).distance.toFixed(1)} m</td>
+                                            <td className="border-b border-p-fg/[0.04] px-2 py-2 text-p-fg">{expectedGoals(s).toFixed(2)}</td>
+                                            <td className="border-b border-p-fg/[0.04] px-2 py-2">{s.goal ? <span style={{ color: TEAMS[s.team].color }}>Tor</span> : <span className="text-p-subtle">–</span>}</td>
+                                            <td className="border-b border-p-fg/[0.04] px-2 py-2 text-right">
+                                                <button type="button" onClick={(e) => { e.stopPropagation(); removeShot(s.id); }} className="text-p-subtle transition-colors hover:text-red-400" aria-label="Schuss entfernen">
                                                     <FiTrash2 />
                                                 </button>
                                             </td>

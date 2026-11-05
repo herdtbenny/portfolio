@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { FiArrowRight } from 'react-icons/fi';
+import { FiArrowDown } from 'react-icons/fi';
 import useInView from '../hooks/useInView';
 import RevealLine from '../components/revealLine';
 import { ROLE_TRACKS } from './roleTracks';
@@ -19,56 +18,66 @@ function Focus() {
     return (
         <section
             id="profil"
-            className="relative box-border overflow-hidden bg-[#000000] px-5 pb-20 pt-28 font-syne sm:px-12 sm:pb-28 sm:pt-32 lg:px-20 lg:pt-36"
+            className="relative box-border overflow-hidden bg-cream px-5 pb-20 pt-28 font-serif sm:px-12 sm:pb-28 sm:pt-32 lg:px-20 lg:pt-36"
         >
             <div ref={ref} className="relative mx-auto w-full max-w-[1200px]">
                 <header className="mb-14 flex flex-wrap items-end justify-between gap-6 sm:mb-20">
                     <div>
-                        <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent">
+                        <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent-deep">
                             <RevealLine inView={inView} delay={0}>Profil</RevealLine>
                         </p>
-                        <h2 className="m-0 text-3xl font-extrabold leading-none tracking-tight text-white sm:text-5xl">
+                        <h2 className="m-0 text-3xl font-medium leading-none tracking-tight text-ink sm:text-5xl">
                             <RevealLine inView={inView} delay={120}>Wo ich Wirkung habe</RevealLine>
                         </h2>
                     </div>
-                    <p className="m-0 max-w-xs font-inter text-sm leading-relaxed text-neutral-500" style={fadeUp(inView, 0.25)}>
-                        Drei Profile, jeweils mit Belegen aus Job und Projekten. Die Aufschlüsselung zeigt, was wofür relevant ist.
+                    <p className="m-0 max-w-xs font-inter text-sm leading-relaxed text-stone-500" style={fadeUp(inView, 0.25)}>
+                        Drei Profile, jeweils mit Belegen aus Job und Projekten.
                     </p>
                 </header>
 
-                <ol className="m-0 grid list-none grid-cols-1 border-b border-white/10 p-0 lg:grid-cols-3 lg:border-b-0">
+                {/* one profile per row: big number + title left, pitch and proof right */}
+                <ol className="m-0 list-none border-b border-ink/10 p-0">
                     {ROLE_TRACKS.map((track, i) => {
                         const count = PROJECTS.filter((p) => p.roles.includes(track.id)).length;
                         return (
                             <li
                                 key={track.id}
-                                className="flex flex-col border-t border-white/10 py-8 lg:border-l lg:border-t-0 lg:px-8 lg:py-2 lg:first:border-l-0 lg:first:pl-0 lg:last:pr-0"
+                                className="grid grid-cols-1 gap-6 border-t border-ink/10 py-10 sm:py-14 lg:grid-cols-12 lg:gap-12"
                                 style={fadeUp(inView, 0.1 + i * 0.1)}
                             >
-                                <p className="m-0 mb-5 font-mono text-[11px] uppercase tracking-[0.18em] text-neutral-600">
-                                    <span className="text-white">{String(i + 1).padStart(2, '0')}</span>
-                                    <span className="mx-3 inline-block h-px w-6 bg-white/20 align-middle" />
-                                    {track.short}
-                                </p>
-                                <h3 className="m-0 mb-4 text-xl font-extrabold leading-tight tracking-tight text-white sm:text-2xl">
-                                    {track.title}
-                                </h3>
-                                <p className="m-0 mb-6 font-inter text-sm leading-relaxed text-neutral-400">{track.pitch}</p>
-                                <ul className="m-0 mb-8 flex list-none flex-col gap-2.5 p-0">
-                                    {track.proof.map((item) => (
-                                        <li key={item} className="flex gap-3 font-inter text-[13px] leading-snug text-neutral-300">
-                                            <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-accent" />
-                                            {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                                <Link
-                                    to={`/aufschluesselung?profil=${track.id}`}
-                                    className="group mt-auto inline-flex items-center gap-3 self-start border-b border-white/25 pb-1.5 font-inter text-sm font-semibold text-white no-underline transition-colors duration-200 hover:border-accent hover:text-accent"
-                                >
-                                    {count} passende Projekte
-                                    <FiArrowRight className="text-xs transition-transform duration-200 group-hover:translate-x-1" />
-                                </Link>
+                                <div className="lg:col-span-5">
+                                    <p className="m-0 mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500">
+                                        {track.short}
+                                    </p>
+                                    <div className="flex items-baseline gap-5">
+                                        <span className="text-5xl font-medium leading-none tracking-tight text-accent-deep sm:text-6xl">
+                                            {String(i + 1).padStart(2, '0')}
+                                        </span>
+                                        <h3 className="m-0 text-2xl font-medium leading-tight tracking-tight text-ink sm:text-3xl">
+                                            {track.title}
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col lg:col-span-7">
+                                    <p className="m-0 mb-6 max-w-[60ch] font-inter text-base leading-relaxed text-stone-600">{track.pitch}</p>
+                                    <ul className="m-0 mb-8 grid list-none grid-cols-1 gap-x-8 gap-y-3 p-0 sm:grid-cols-2">
+                                        {track.proof.map((item) => (
+                                            <li key={item} className="flex gap-3 font-inter text-sm leading-snug text-stone-700">
+                                                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-accent-deep" />
+                                                {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <button
+                                        type="button"
+                                        onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                                        className="group inline-flex items-center gap-3 self-start border-0 border-b border-solid border-ink/25 bg-transparent px-0 pb-1.5 font-inter text-sm font-semibold text-ink transition-colors duration-200 hover:border-accent-deep hover:text-accent-deep"
+                                    >
+                                        {count} passende Projekte
+                                        <FiArrowDown className="text-xs transition-transform duration-200 group-hover:translate-y-0.5" />
+                                    </button>
+                                </div>
                             </li>
                         );
                     })}

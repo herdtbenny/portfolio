@@ -30,14 +30,14 @@ const contactCards = [
 // label sits inside the field and floats up once it is focused or filled (placeholder=" " drives :placeholder-shown)
 function Field({ id, label, type = 'text', textarea = false, className = '' }) {
     const fieldClasses =
-        'peer block w-full resize-none border-0 border-b border-white/15 bg-transparent px-0 pb-2 pt-5 font-inter text-base text-white outline-none transition-colors duration-200 focus:border-accent';
+        'peer block w-full resize-none border-0 border-b border-ink/15 bg-transparent px-0 pb-2 pt-5 font-inter text-base text-ink outline-none transition-colors duration-200 focus:border-accent-deep';
     const Tag = textarea ? 'textarea' : 'input';
     return (
         <div className={`relative ${className}`}>
             <Tag id={id} name={id} type={textarea ? undefined : type} rows={textarea ? 2 : undefined} required placeholder=" " className={`${fieldClasses} ${textarea ? 'h-full min-h-[4.5rem]' : ''}`} />
             <label
                 htmlFor={id}
-                className="pointer-events-none absolute left-0 top-1 font-inter text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-base peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-1 peer-focus:text-[11px] peer-focus:uppercase peer-focus:tracking-[0.14em] peer-focus:text-accent"
+                className="pointer-events-none absolute left-0 top-1 font-inter text-[11px] font-medium uppercase tracking-[0.14em] text-stone-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-base peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-1 peer-focus:text-[11px] peer-focus:uppercase peer-focus:tracking-[0.14em] peer-focus:text-accent-deep"
             >
                 {label}
             </label>
@@ -71,7 +71,7 @@ function Contact() {
         <section
             id="kontakt"
             ref={ref}
-            className="relative box-border min-h-screen overflow-hidden bg-[#000000] px-5 pb-16 pt-28 font-syne sm:px-12 sm:pb-24 sm:pt-32 lg:px-20 lg:pt-36"
+            className="relative box-border min-h-screen overflow-hidden bg-cream px-5 pb-16 pt-28 font-serif sm:px-12 sm:pb-24 sm:pt-32 lg:px-20 lg:pt-36"
         >
             <div className="pointer-events-none absolute -right-28 -top-36 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(143,176,255,0.08)_0%,transparent_70%)] sm:h-[420px] sm:w-[420px] lg:h-[520px] lg:w-[520px]" />
 
@@ -82,33 +82,33 @@ function Contact() {
                     transform: inView ? 'translateY(0)' : 'translateY(40px)',
                 }}
             >
-                <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent">
+                <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent-deep">
                     <RevealLine inView={inView} delay={0}>Get in touch</RevealLine>
                 </p>
-                <h2 className="m-0 mb-12 text-3xl font-extrabold leading-none tracking-tight text-white sm:mb-16 sm:text-5xl">
+                <h2 className="m-0 mb-12 text-3xl font-medium leading-none tracking-tight text-ink sm:mb-16 sm:text-5xl">
                     <RevealLine inView={inView} delay={120}>Kontakt</RevealLine>
                 </h2>
 
                 <div className="grid grid-cols-1 items-start gap-14 lg:grid-cols-12 lg:items-stretch lg:gap-16">
                     {/* DIRECT CHANNELS */}
-                    <ul className="m-0 list-none border-b border-white/10 p-0 lg:col-span-5">
+                    <ul className="m-0 list-none border-b border-ink/10 p-0 lg:col-span-5">
                         {contactCards.map((card, i) => (
-                            <li key={card.label} className="border-t border-white/10">
+                            <li key={card.label} className="border-t border-ink/10">
                                 <a
                                     href={card.href}
                                     target={card.href.startsWith('http') ? '_blank' : undefined}
                                     rel={card.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                                     className="group flex items-center gap-5 py-6 no-underline sm:py-7"
                                 >
-                                    <span className="w-6 font-mono text-[11px] text-neutral-600">{String(i + 1).padStart(2, '0')}</span>
-                                    <span className="text-lg text-neutral-500 transition-colors duration-200 group-hover:text-accent">{card.icon}</span>
+                                    <span className="w-6 font-mono text-[11px] text-stone-500">{String(i + 1).padStart(2, '0')}</span>
+                                    <span className="text-lg text-stone-500 transition-colors duration-200 group-hover:text-accent-deep">{card.icon}</span>
                                     <span className="flex flex-col">
-                                        <span className="text-2xl font-extrabold tracking-tight text-white transition-transform duration-300 ease-out group-hover:translate-x-1.5 motion-reduce:transition-none sm:text-3xl">
+                                        <span className="text-2xl font-medium tracking-tight text-ink transition-transform duration-300 ease-out group-hover:translate-x-1.5 motion-reduce:transition-none sm:text-3xl">
                                             {card.label}
                                         </span>
-                                        <span className="mt-1 font-inter text-xs text-neutral-500">{card.desc}</span>
+                                        <span className="mt-1 font-inter text-xs text-stone-500">{card.desc}</span>
                                     </span>
-                                    <FiArrowUpRight className="ml-auto shrink-0 text-xl text-neutral-600 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
+                                    <FiArrowUpRight className="ml-auto shrink-0 text-xl text-stone-500 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-deep" />
                                 </a>
                             </li>
                         ))}
@@ -119,9 +119,9 @@ function Contact() {
                         action={FORMSPREE_ENDPOINT}
                         method="POST"
                         onSubmit={handleSubmit}
-                        className="relative flex flex-col gap-5 rounded-3xl border border-white/[0.08] bg-white/[0.02] p-6 backdrop-blur-sm sm:p-7 lg:col-span-7"
+                        className="relative flex flex-col gap-5 rounded-3xl border border-ink/[0.08] bg-ink/[0.02] p-6 backdrop-blur-sm sm:p-7 lg:col-span-7"
                     >
-                        <p className="m-0 font-mono text-[11px] uppercase tracking-[0.18em] text-neutral-500">Nachricht senden</p>
+                        <p className="m-0 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500">Nachricht senden</p>
 
                         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-8">
                             <Field id="name" label="Name" />
@@ -133,17 +133,17 @@ function Contact() {
                             <button
                                 type="submit"
                                 disabled={status === 'sending'}
-                                className="group inline-flex items-center gap-3 rounded-full bg-white px-6 py-3 font-inter text-sm font-semibold text-black transition-[background,transform] duration-200 ease-out hover:bg-accent active:scale-[0.97] disabled:cursor-wait disabled:opacity-60"
+                                className="group inline-flex items-center gap-3 rounded-full bg-ink px-6 py-3 font-inter text-sm font-semibold text-cream transition-[background,transform] duration-200 ease-out hover:bg-accent-deep active:scale-[0.97] disabled:cursor-wait disabled:opacity-60"
                             >
                                 {status === 'sending' ? 'Wird gesendet…' : 'Nachricht senden'}
                                 <FiArrowRight className="transition-transform duration-200 group-hover:translate-x-1" />
                             </button>
                             <p aria-live="polite" className="m-0 font-inter text-sm">
                                 {status === 'sent' && (
-                                    <span className="inline-flex items-center gap-2 text-accent"><FiCheck /> Danke, ich melde mich!</span>
+                                    <span className="inline-flex items-center gap-2 text-accent-deep"><FiCheck /> Danke, ich melde mich!</span>
                                 )}
                                 {status === 'error' && (
-                                    <span className="text-red-400">Das hat nicht geklappt, schreib mir gern direkt per Mail.</span>
+                                    <span className="text-red-700">Das hat nicht geklappt, schreib mir gern direkt per Mail.</span>
                                 )}
                             </p>
                         </div>
