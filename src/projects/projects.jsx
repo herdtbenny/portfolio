@@ -156,18 +156,16 @@ function Projects() {
         >
             <div className="pointer-events-none absolute -right-28 -top-36 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(143,176,255,0.08)_0%,transparent_70%)] sm:h-[420px] sm:w-[420px] lg:h-[520px] lg:w-[520px]" />
 
-            <div className="relative mx-auto w-full max-w-[1200px]">
-                <header ref={ref} className="mb-14 flex flex-wrap items-end justify-between gap-6 sm:mb-20">
-                    <div>
-                        <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent-deep">
-                            <RevealLine inView={inView} delay={0}>Portfolio</RevealLine>
-                        </p>
-                        <h2 className="m-0 text-3xl font-medium leading-none tracking-tight text-ink sm:text-5xl">
-                            <RevealLine inView={inView} delay={120}>Projekte</RevealLine>
-                        </h2>
-                    </div>
+            <div className="relative mx-auto w-full max-w-[1280px]">
+                <header ref={ref} className="mb-14 sm:mb-20">
+                    <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent-deep">
+                        <RevealLine inView={inView} delay={0}>Portfolio</RevealLine>
+                    </p>
+                    <h2 className="m-0 text-3xl font-medium leading-none tracking-tight text-ink sm:text-5xl">
+                        <RevealLine inView={inView} delay={120}>Projekte</RevealLine>
+                    </h2>
                     <p
-                        className="m-0 max-w-xs font-inter text-sm leading-relaxed text-stone-500"
+                        className="m-0 mt-5 font-inter text-sm leading-relaxed text-stone-600 sm:mt-6 sm:text-base"
                         style={fadeUp(inView, 0.25)}
                     >
                         Eine eigene Webagentur, eine privat genutzte Full-Stack-App und vier interaktive Projekte – von Fußballdaten über Finanzen bis Security. Gebaut mit Claude Code.

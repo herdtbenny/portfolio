@@ -76,7 +76,7 @@ function Contact() {
             <div className="pointer-events-none absolute -right-28 -top-36 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(143,176,255,0.08)_0%,transparent_70%)] sm:h-[420px] sm:w-[420px] lg:h-[520px] lg:w-[520px]" />
 
             <div
-                className="relative mx-auto w-full max-w-[1200px] transition-all duration-700 ease-out"
+                className="relative mx-auto w-full max-w-[1280px] transition-all duration-700 ease-out"
                 style={{
                     opacity: inView ? 1 : 0,
                     transform: inView ? 'translateY(0)' : 'translateY(40px)',

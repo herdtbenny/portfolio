@@ -3,7 +3,6 @@ import LoopingVideo from '../components/loopingVideo';
 import Navbar from '../navbar/navbar';
 import Hero from '../hero/hero';
 import About from '../about/about';
-import Focus from '../focus/focus';
 import Timeline from '../timeline/timeline';
 import Projects from '../projects/projects';
 import Contact from '../contact/contact';
@@ -70,7 +69,6 @@ function Home() {
                 <div className="absolute inset-0" style={{ background: CREAM_FADE }} />
             </div>
             <About />
-            <Focus />
             <Timeline />
             <Projects />
             <Contact />

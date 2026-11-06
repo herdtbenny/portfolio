@@ -5,8 +5,8 @@ const ACTIVE_SECTION_OFFSET_RATIO = 0.35;
 const navItems = [
     { label: 'Start', id: 'hero' },
     { label: 'Über mich', id: 'about' },
-    { label: 'Profil', id: 'profil' },
     { label: 'Lebenslauf', id: 'lebenslauf' },
+    { label: 'Interessen', id: 'interessen' },
     { label: 'Projekte', id: 'projects' },
     { label: 'Kontakt', id: 'kontakt' },
 ];
@@ -32,8 +32,8 @@ const glassStyleDark = {
 
 // text colors per background: over the hero video vs. on the cream content
 const NAV_COLORS = {
-    dark: { active: '#F2F2F0', idle: 'rgba(255,255,255,0.45)', hover: 'rgba(255,255,255,0.85)', activeBg: 'linear-gradient(135deg, rgba(242,242,240,0.12), rgba(242,242,240,0.06))' },
-    light: { active: '#1d1b18', idle: 'rgba(29,27,24,0.5)', hover: 'rgba(29,27,24,0.85)', activeBg: 'rgba(29,27,24,0.07)' },
+    dark: { active: '#F2F2F0', idle: 'rgba(255,255,255,0.45)', hover: 'rgba(255,255,255,0.85)', },
+    light: { active: '#1d1b18', idle: 'rgba(29,27,24,0.5)', hover: 'rgba(29,27,24,0.85)' },
 };
 
 function NavBtn({ item, active, onClick, mobile = false, light = false }) {
@@ -41,19 +41,23 @@ function NavBtn({ item, active, onClick, mobile = false, light = false }) {
     return (
         <button
             onClick={onClick}
+            aria-current={active ? 'true' : undefined}
             className={
                 mobile
-                    ? 'w-full rounded-2xl px-5 py-3.5 text-center text-base font-medium tracking-wide transition-[color,background,transform] duration-200 ease-out active:scale-[0.97]'
-                    : 'rounded-full px-3.5 py-2 text-xs font-medium tracking-wide transition-[color,background,transform] duration-200 ease-out active:scale-[0.95] lg:px-5 lg:text-sm'
+                    ? 'w-full rounded-2xl px-5 py-3.5 text-center text-base tracking-wide transition-[color,transform] duration-200 ease-out active:scale-[0.97]'
+                    : 'rounded-full px-3.5 py-2 text-xs tracking-wide transition-[color,transform] duration-200 ease-out active:scale-[0.95] lg:px-5 lg:text-sm'
             }
             style={{
                 color: active ? c.active : c.idle,
-                background: active ? c.activeBg : 'transparent',
             }}
             onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = c.hover; }}
             onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = c.idle; }}
         >
-            {item.label}
+            {/* an invisible bold copy reserves the width, so the bar doesn't shift when the weight changes */}
+            <span className="inline-grid">
+                <span className="invisible col-start-1 row-start-1 font-bold" aria-hidden>{item.label}</span>
+                <span className={`col-start-1 row-start-1 transition-[font-weight] duration-200 ${active ? 'font-bold' : 'font-medium'}`}>{item.label}</span>
+            </span>
         </button>
     );
 }

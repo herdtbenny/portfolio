@@ -1,14 +1,16 @@
 import { FiArrowDown, FiBookOpen, FiBriefcase, FiCode, FiDownload, FiMail, FiMapPin } from "react-icons/fi";
 import useInView from "../hooks/useInView";
 import RevealLine from "../components/revealLine";
+import OrgLinks from "../components/orgLinks";
 
 // one flowing banner: hard facts from the CV first (with icons), then the roles
 const bannerItems = [
     { Icon: FiMapPin, label: 'Regensburg' },
-    { Icon: FiBriefcase, label: 'Werkstudent bei IMPECT' },
+    { Icon: FiBriefcase, label: 'Software & Product bei IMPECT' },
     { Icon: FiBookOpen, label: 'B.Sc. Wirtschaftsinformatik · Ø 1,8' },
     { Icon: FiCode, label: 'Java · Angular · React · TypeScript' },
     { label: 'Full-Stack' },
+    { label: 'Requirements Engineering' },
     { label: 'Agentic Coding' },
     { label: 'Product Thinking' },
     { label: 'Data & Analytics' },
@@ -49,31 +51,31 @@ function Hero() {
                     <RevealLine inView={inView} delay={80}>Benny</RevealLine>
                     <RevealLine inView={inView} delay={200}><span className="text-white/65">Herdt</span></RevealLine>
                 </h1>
-            </div>
 
-            {/* subtitle, banner and actions are grouped in the lower part */}
-            <div className="relative z-10 mt-auto flex flex-col items-center pb-[12vh] pt-16 text-center sm:pb-[14vh]">
                 <p
-                    className="m-0 mb-8 max-w-4xl text-balance px-5 font-inter text-base leading-relaxed text-white/85 transition-[opacity,transform] duration-700 ease-out sm:px-12 sm:text-lg"
+                    className="m-0 mt-6 text-balance font-inter xl:whitespace-nowrap text-base leading-relaxed text-white/85 transition-[opacity,transform] duration-700 ease-out sm:mt-8 sm:text-lg"
                     style={fadeIn(inView, 350)}
                 >
-                    Wirtschaftsinformatik-Student an der OTH Regensburg und Werkstudent in der Softwareentwicklung bei IMPECT.
+                    <OrgLinks className="decoration-white/40 hover:text-accent hover:decoration-accent">Wirtschaftsinformatik-Student an der OTH Regensburg und Werkstudent in Softwareentwicklung und Product bei IMPECT.</OrgLinks>
                 </p>
+            </div>
 
+            {/* banner and actions are grouped in the lower part */}
+            <div className="relative z-10 mt-auto flex flex-col items-center pb-[12vh] pt-16 text-center sm:pb-[14vh]">
                 {/* the list is rendered twice so the loop is seamless */}
                 <div
-                    className="relative w-full overflow-hidden border-y border-accent/30 bg-accent/[0.08] py-3.5 backdrop-blur-md transition-opacity duration-700 ease-out sm:py-4 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
-                    style={{ opacity: inView ? 1 : 0, transitionDelay: '450ms', WebkitMaskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)' }}
+                    className="relative w-full overflow-hidden border-y border-white/15 py-3 transition-opacity duration-700 ease-out sm:py-3.5"
+                    style={{ opacity: inView ? 1 : 0, transitionDelay: '450ms' }}
                     aria-label={bannerItems.map((item) => item.label).join(', ')}
                 >
                     <div className="flex w-max animate-marquee motion-reduce:animate-none" aria-hidden>
                         {[0, 1].map((copy) => (
                             <ul key={copy} className="m-0 flex list-none items-center p-0">
                                 {bannerItems.map(({ Icon, label }) => (
-                                    <li key={label} className="flex items-center whitespace-nowrap font-inter text-xs font-medium uppercase tracking-[0.24em] text-cream sm:text-sm">
-                                        {Icon && <Icon className="mr-2.5 text-[1.1em] text-accent" />}
+                                    <li key={label} className="flex items-center whitespace-nowrap font-inter text-xs font-medium uppercase tracking-[0.16em] text-white/80 sm:text-[13px]">
+                                        {Icon && <Icon className="mr-2 text-[1.05em] text-white/50" />}
                                         {label}
-                                        <span className="mx-7 h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_12px_2px_rgba(143,176,255,0.7)] sm:mx-10" />
+                                        <span className="mx-6 h-3 w-px bg-white/25 sm:mx-8" />
                                     </li>
                                 ))}
                             </ul>
@@ -86,7 +88,7 @@ function Hero() {
                     style={fadeIn(inView, 600)}
                 >
                     <a
-                        href="/Lebenslauf_Benny_Herdt.pdf"
+                        href="/Lebenslauf_DE.pdf"
                         download="Lebenslauf_Benny_Herdt.pdf"
                         className="group inline-flex items-center gap-2.5 rounded-full bg-white px-5 py-3 font-inter text-sm font-semibold text-black no-underline transition-[background,transform] duration-200 ease-out hover:bg-accent active:scale-[0.97]"
                     >
