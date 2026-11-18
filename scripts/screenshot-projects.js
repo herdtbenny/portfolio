@@ -1,8 +1,10 @@
 // Re-captures the project preview images used in src/projects/projects.jsx.
 // Run manually whenever a project site changes: `npm run screenshot:projects`
 // Keep this list in sync with src/projects/projectData.js.
-// Exception: kochbuch.jpg and public/projects/kochbuch/* are captured from a local copy of the
-// private app running on demo data, so they are not part of this script.
+// Exception: kochbuch, foodie and finanzboard (the .jpg cards and their public/projects/<name>/ folders)
+// are captured from the private apps running on demo data — Kochbuch and Foodie as local copies on an
+// in-memory PGlite database, Finanzboard as its built SPA with every /api call answered by invented
+// data — so they are not part of this script. The cards are three phone shots on a dark ground.
 // Pass file names to re-capture only those: `npm run screenshot:projects -- websbybenny.jpg`
 // Pass --local to capture the portfolio pages from ./build instead of production (run
 // `npm run build` first). Files are served straight from disk through Playwright, no server needed.
@@ -36,10 +38,9 @@ const projects = [
     // a stored "nothing optional" choice keeps the cookie banner out of the shot
     // (key and version as in websbybenny's src/consent/consent.jsx)
     { url: 'https://websbybenny.de', file: 'websbybenny.jpg', wait: 6000, consent: { key: 'wbb-consent', value: { v: 3, statistics: false } } },
-    { url: 'https://portfolio.websbybenny.de/sportScorings', file: 'sportscorings.jpg' },
-    { url: 'https://portfolio.websbybenny.de/xg-lab', file: 'xglab.jpg' },
-    { url: 'https://portfolio.websbybenny.de/finance-tracker', file: 'finanztracker.jpg' },
-    { url: 'https://portfolio.websbybenny.de/auth-rollen-system', file: 'rbac.jpg' },
+    // xG Lab and Sport Scorings live in their own repos and deployments (herdtbenny/xG-lab, herdtbenny/sport-scorings)
+    { url: 'https://sport-scorings.websbybenny.de', file: 'sportscorings.jpg' },
+    { url: 'https://xg-lab.websbybenny.de', file: 'xglab.jpg' },
 ];
 
 async function screenshotProject(browser, project) {

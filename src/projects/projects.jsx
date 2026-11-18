@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiArrowUpRight } from 'react-icons/fi';
+import { FiArrowRight, FiArrowUpRight, FiGithub, FiLock } from 'react-icons/fi';
 import useInView from '../hooks/useInView';
 import RevealLine from '../components/revealLine';
 import { PROJECTS } from './projectData';
@@ -87,10 +87,10 @@ function ProjectSpread({ project, index }) {
     const number = String(index + 1).padStart(2, '0');
 
     return (
-        <article ref={ref} className="border-t border-ink/10 pt-6 sm:pt-8">
+        <article ref={ref} className="border-t border-ink/10 pt-8 sm:pt-10">
             {/* meta row */}
             <div
-                className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500 sm:mb-8"
+                className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500 sm:mb-12"
                 style={fadeUp(inView)}
             >
                 <span className="text-ink">{number}</span>
@@ -107,34 +107,55 @@ function ProjectSpread({ project, index }) {
                 </span>
             </div>
 
-            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-16">
                 <div className={`lg:col-span-6 ${flipped ? 'lg:order-2' : ''}`}>
-                    <h3 className="m-0 mb-4 text-3xl font-medium leading-[0.95] tracking-tight text-ink sm:text-4xl">
+                    <h3 className="m-0 mb-6 text-3xl font-medium leading-[0.95] tracking-tight text-ink sm:text-4xl">
                         <RevealLine inView={inView} delay={60}>{project.title}</RevealLine>
                     </h3>
 
                     <div style={fadeUp(inView, 0.1)}>
-                        <p className="m-0 mb-5 max-w-[46ch] font-inter text-sm leading-relaxed text-stone-600">
+                        <p className="m-0 mb-7 max-w-[46ch] font-inter text-sm leading-relaxed text-stone-600 sm:text-[15px]">
                             {project.summary}
                         </p>
 
-                        <ul className="m-0 mb-7 flex max-w-[52ch] list-none flex-wrap gap-x-4 gap-y-1.5 p-0 font-mono text-[11px] uppercase tracking-[0.12em] text-stone-500">
+                        <ul className="m-0 mb-9 flex max-w-[52ch] list-none flex-wrap gap-x-4 gap-y-2.5 p-0 font-mono text-[11px] uppercase tracking-[0.12em] text-stone-500">
                             {project.skills.map((skill) => <li key={skill}>{skill}</li>)}
                         </ul>
 
-                        {project.href && (
-                            <ProjectLink
-                                href={project.href}
-                                className="group/link inline-flex items-center gap-3 border-b border-ink/25 pb-1.5 font-inter text-sm font-semibold text-ink no-underline transition-colors duration-200 hover:border-accent-deep hover:text-accent-deep"
-                            >
-                                {project.linkLabel}
-                                {project.href.startsWith('/') ? (
-                                    <FiArrowRight className="text-xs transition-transform duration-200 group-hover/link:translate-x-1" />
-                                ) : (
-                                    <FiArrowUpRight className="text-xs transition-transform duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
-                                )}
-                            </ProjectLink>
-                        )}
+                        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+                            {project.href && (
+                                <ProjectLink
+                                    href={project.href}
+                                    className="group/link inline-flex items-center gap-3 border-b border-ink/25 pb-1.5 font-inter text-sm font-semibold text-ink no-underline transition-colors duration-200 hover:border-accent-deep hover:text-accent-deep"
+                                >
+                                    {project.href === project.repo && <FiGithub className="text-sm" />}
+                                    {project.linkLabel}
+                                    {project.href.startsWith('/') ? (
+                                        <FiArrowRight className="text-xs transition-transform duration-200 group-hover/link:translate-x-1" />
+                                    ) : (
+                                        <FiArrowUpRight className="text-xs transition-transform duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
+                                    )}
+                                </ProjectLink>
+                            )}
+                            {project.repo && project.repo !== project.href && (
+                                <a
+                                    href={project.repo}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group/repo inline-flex items-center gap-2 pb-1.5 font-inter text-sm font-medium text-stone-600 no-underline transition-colors duration-200 hover:text-accent-deep"
+                                >
+                                    <FiGithub className="text-sm" />
+                                    Code auf GitHub
+                                    <FiArrowUpRight className="text-xs transition-transform duration-200 group-hover/repo:-translate-y-0.5 group-hover/repo:translate-x-0.5" />
+                                </a>
+                            )}
+                            {project.repoPrivate && (
+                                <span className="inline-flex items-center gap-2 pb-1.5 font-inter text-sm font-medium text-stone-500" title="Der Quellcode liegt in einem privaten Repository">
+                                    <FiLock className="text-sm" />
+                                    Code privat
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -152,12 +173,12 @@ function Projects() {
     return (
         <section
             id="projects"
-            className="relative box-border overflow-hidden bg-cream px-5 pb-20 pt-28 font-serif sm:px-12 sm:pb-28 sm:pt-32 lg:px-20 lg:pt-36"
+            className="relative box-border overflow-hidden bg-mist px-5 pb-28 pt-32 font-serif sm:px-12 sm:pb-36 sm:pt-40 lg:px-20 lg:pb-44 lg:pt-44"
         >
-            <div className="pointer-events-none absolute -right-28 -top-36 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(143,176,255,0.08)_0%,transparent_70%)] sm:h-[420px] sm:w-[420px] lg:h-[520px] lg:w-[520px]" />
+            <div className="pointer-events-none absolute -right-28 -top-36 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(68,114,196,0.08)_0%,transparent_70%)] sm:h-[420px] sm:w-[420px] lg:h-[520px] lg:w-[520px]" />
 
             <div className="relative mx-auto w-full max-w-[1280px]">
-                <header ref={ref} className="mb-14 sm:mb-20">
+                <header ref={ref} className="mb-16 sm:mb-24">
                     <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent-deep">
                         <RevealLine inView={inView} delay={0}>Portfolio</RevealLine>
                     </p>
@@ -168,11 +189,11 @@ function Projects() {
                         className="m-0 mt-5 font-inter text-sm leading-relaxed text-stone-600 sm:mt-6 sm:text-base"
                         style={fadeUp(inView, 0.25)}
                     >
-                        Eine eigene Webagentur, eine privat genutzte Full-Stack-App und vier interaktive Projekte – von Fußballdaten über Finanzen bis Security. Gebaut mit Claude Code.
+                        Eine eigene Webagentur, drei privat genutzte Full-Stack-Apps und zwei interaktive Datenprojekte – von Rezepten über Restaurants und Finanzen bis zu Fußballdaten. Gebaut mit Claude Code.
                     </p>
                 </header>
 
-                <div className="flex flex-col gap-14 sm:gap-20">
+                <div className="flex flex-col gap-24 sm:gap-32">
                     {PROJECTS.map((project, i) => (
                         <ProjectSpread key={project.id} project={project} index={i} />
                     ))}

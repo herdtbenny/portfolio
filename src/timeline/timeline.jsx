@@ -1,9 +1,7 @@
-import { FiArrowDown, FiDownload, FiExternalLink } from 'react-icons/fi';
+import { FiDownload, FiExternalLink } from 'react-icons/fi';
 import useInView from '../hooks/useInView';
 import RevealLine from '../components/revealLine';
 import OrgLinks from '../components/orgLinks';
-import { ROLE_TRACKS } from '../focus/roleTracks';
-import { PROJECTS } from '../projects/projectData';
 
 const EASE = 'cubic-bezier(0.16,1,0.3,1)';
 
@@ -137,8 +135,7 @@ const GROUPS = [
                     {
                         points: [
                             'Notendurchschnitt 2,0 · wirtschaftswissenschaftlicher Zweig',
-                            'Oberstufensprecher: Schülervertretung gegenüber Schulleitung und Lehrkräften',
-                            'Klassensprecher: Ansprechpartner und Vermittler zwischen Klasse und Lehrkräften',
+                            'Oberstufensprecher/Klassensprecher: Schülervertretung',
                         ],
                     },
                 ],
@@ -155,7 +152,7 @@ function Dot({ current }) {
             {current && <span className="absolute inset-0 animate-ping rounded-full bg-accent-deep/40 motion-reduce:animate-none" />}
             <span
                 className={`relative h-3.5 w-3.5 rounded-full border-2 ${
-                    current ? 'border-accent-deep bg-accent-deep' : 'border-ink/30 bg-cream'
+                    current ? 'border-accent-deep bg-accent-deep' : 'border-ink/30 bg-sage'
                 }`}
             />
         </span>
@@ -164,12 +161,12 @@ function Dot({ current }) {
 
 function Station({ station, inView, delay }) {
     return (
-        <li className="relative grid grid-cols-[14px_1fr] gap-x-5 pb-12 last:pb-0 sm:grid-cols-[14px_170px_1fr] sm:gap-x-8" style={fadeUp(inView, delay)}>
+        <li className="relative grid grid-cols-[14px_1fr] gap-x-5 pb-16 last:pb-0 sm:grid-cols-[14px_170px_1fr] sm:gap-x-8" style={fadeUp(inView, delay)}>
             <div className="pt-2.5">
                 <Dot current={station.current} />
             </div>
 
-            <div className="col-start-2 mb-3 sm:mb-0 sm:pt-1.5">
+            <div className="col-start-2 mb-4 sm:mb-0 sm:pt-1.5">
                 <p className="m-0 font-mono text-[11px] uppercase tracking-[0.14em] text-stone-700">{station.period}</p>
                 <p className="m-0 mt-1 font-inter text-xs text-stone-500">{station.place}</p>
             </div>
@@ -181,16 +178,16 @@ function Station({ station, inView, delay }) {
                         <span className="ml-3 align-middle font-inter text-sm font-normal tracking-normal text-stone-500"><OrgLinks>{station.orgNote}</OrgLinks></span>
                     )}
                 </h4>
-                <div className="mt-4 flex flex-col gap-5">
+                <div className="mt-6 flex flex-col gap-8">
                     {station.roles.map((role, i) => (
                         <div key={role.title ?? i}>
                             {role.title && (
-                                <p className="m-0 mb-2 font-inter text-sm">
+                                <p className="m-0 mb-3 font-inter text-sm">
                                     <span className="font-semibold text-accent-deep">{role.title}</span>
                                     {role.meta && <span className="ml-2 text-stone-500">{role.meta}</span>}
                                 </p>
                             )}
-                            <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+                            <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
                                 {role.points.map((point) => (
                                     <li key={point} className="flex gap-3 font-inter text-[15px] leading-relaxed text-stone-700">
                                         <span className="mt-[11px] h-px w-3 shrink-0 bg-accent-deep" />
@@ -203,45 +200,6 @@ function Station({ station, inView, delay }) {
                 </div>
             </div>
         </li>
-    );
-}
-
-// compact version of the former "Meine Interessen" section, styled like the CV stations
-function Interests({ inView }) {
-    return (
-        <div id="interessen" className="scroll-mt-28" style={fadeUp(inView, 0.55)}>
-            <h3 className="m-0 mb-8 border-b border-ink/10 pb-4 font-mono text-[11px] font-normal uppercase tracking-[0.18em] text-stone-500">
-                Interessen
-            </h3>
-            <ul className="m-0 flex list-none flex-col gap-10 p-0">
-                {ROLE_TRACKS.map((track) => {
-                    const count = PROJECTS.filter((p) => p.roles.includes(track.id)).length;
-                    return (
-                        <li key={track.id}>
-                            <p className="m-0 mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-deep">{track.short}</p>
-                            <h4 className="m-0 text-2xl font-medium leading-tight tracking-tight text-ink sm:text-3xl">{track.title}</h4>
-                            <p className="m-0 mt-3 font-inter text-[15px] leading-relaxed text-stone-600">{track.pitch}</p>
-                            <ul className="m-0 mt-4 grid list-none grid-cols-1 gap-x-8 gap-y-1.5 p-0 sm:grid-cols-2">
-                                {track.proof.map((item) => (
-                                    <li key={item} className="flex gap-3 font-inter text-[15px] leading-relaxed text-stone-700">
-                                        <span className="mt-[11px] h-px w-3 shrink-0 bg-accent-deep" />
-                                        <span><OrgLinks>{item}</OrgLinks></span>
-                                    </li>
-                                ))}
-                            </ul>
-                            <button
-                                type="button"
-                                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                                className="group mt-4 inline-flex items-center gap-2 border-0 border-b border-solid border-ink/25 bg-transparent px-0 pb-1 font-inter text-sm font-semibold text-ink transition-colors duration-200 hover:border-accent-deep hover:text-accent-deep"
-                            >
-                                {count} passende Projekte
-                                <FiArrowDown className="text-xs transition-transform duration-200 group-hover:translate-y-0.5" />
-                            </button>
-                        </li>
-                    );
-                })}
-            </ul>
-        </div>
     );
 }
 
@@ -294,10 +252,10 @@ function Timeline() {
     return (
         <section
             id="lebenslauf"
-            className="relative box-border overflow-clip bg-cream px-5 pb-20 pt-28 font-serif sm:px-12 sm:pb-28 sm:pt-32 lg:px-20 lg:pt-36"
+            className="relative box-border overflow-clip bg-sage px-5 pb-28 pt-32 font-serif sm:px-12 sm:pb-36 sm:pt-40 lg:px-20 lg:pb-44 lg:pt-44"
         >
             <div ref={ref} className="relative mx-auto w-full max-w-[1280px]">
-                <header className="mb-14 flex flex-wrap items-end justify-between gap-6 sm:mb-20">
+                <header className="mb-16 flex flex-wrap items-end justify-between gap-6 sm:mb-24">
                     <div>
                         <p className="m-0 mb-3.5 font-inter text-xs font-semibold uppercase tracking-[3px] text-accent-deep">
                             <RevealLine inView={inView} delay={0}>Stationen</RevealLine>
@@ -318,11 +276,11 @@ function Timeline() {
                 </header>
 
                 <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-14">
-                    <div className="flex flex-col gap-16 lg:col-span-8">
+                    <div className="flex flex-col gap-24 lg:col-span-8">
                         {GROUPS.map((group, g) => (
                             <div key={group.label}>
                                 <h3
-                                    className="m-0 mb-10 border-b border-ink/10 pb-4 font-mono text-[11px] font-normal uppercase tracking-[0.18em] text-stone-500"
+                                    className="m-0 mb-12 border-b border-ink/10 pb-4 font-mono text-[11px] font-normal uppercase tracking-[0.18em] text-stone-500"
                                     style={fadeUp(inView, 0.15 + g * 0.1)}
                                 >
                                     {group.label}
@@ -348,7 +306,7 @@ function Timeline() {
                         ))}
 
                         <div style={fadeUp(inView, 0.5)}>
-                            <h3 className="m-0 mb-6 border-b border-ink/10 pb-4 font-mono text-[11px] font-normal uppercase tracking-[0.18em] text-stone-500">
+                            <h3 className="m-0 mb-8 border-b border-ink/10 pb-4 font-mono text-[11px] font-normal uppercase tracking-[0.18em] text-stone-500">
                                 Sprachen
                             </h3>
                             <ul className="m-0 flex list-none flex-wrap gap-x-8 gap-y-3 p-0">
@@ -357,8 +315,6 @@ function Timeline() {
                                 ))}
                             </ul>
                         </div>
-
-                        <Interests inView={inView} />
                     </div>
 
                     <div className="lg:col-span-4">

@@ -71,9 +71,9 @@ function Contact() {
         <section
             id="kontakt"
             ref={ref}
-            className="relative box-border min-h-screen overflow-hidden bg-cream px-5 pb-16 pt-28 font-serif sm:px-12 sm:pb-24 sm:pt-32 lg:px-20 lg:pt-36"
+            className="relative box-border min-h-screen overflow-hidden bg-sand px-5 pb-16 pt-28 font-serif sm:px-12 sm:pb-24 sm:pt-32 lg:px-20 lg:pt-36"
         >
-            <div className="pointer-events-none absolute -right-28 -top-36 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(143,176,255,0.08)_0%,transparent_70%)] sm:h-[420px] sm:w-[420px] lg:h-[520px] lg:w-[520px]" />
+            <div className="pointer-events-none absolute -right-28 -top-36 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(68,114,196,0.08)_0%,transparent_70%)] sm:h-[420px] sm:w-[420px] lg:h-[520px] lg:w-[520px]" />
 
             <div
                 className="relative mx-auto w-full max-w-[1280px] transition-all duration-700 ease-out"

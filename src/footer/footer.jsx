@@ -8,7 +8,7 @@ const links = [
 
 function Footer() {
     return (
-        <footer className="bg-cream px-5 pb-10 font-inter sm:px-12 lg:px-20">
+        <footer className="bg-sand px-5 pb-10 font-inter sm:px-12 lg:px-20">
             <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 border-t border-ink/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
                 <p className="m-0 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500">
                     © {new Date().getFullYear()} Benny Herdt

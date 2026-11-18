@@ -1,118 +1,49 @@
-import { FiArrowDown, FiBookOpen, FiBriefcase, FiCode, FiDownload, FiMail, FiMapPin } from "react-icons/fi";
-import useInView from "../hooks/useInView";
-import RevealLine from "../components/revealLine";
-import OrgLinks from "../components/orgLinks";
+import { FiChevronDown } from 'react-icons/fi';
+import BlurText from '../components/blurText';
+import bennyHero from '../assets/benny-hero.png';
 
-// one flowing banner: hard facts from the CV first (with icons), then the roles
-const bannerItems = [
-    { Icon: FiMapPin, label: 'Regensburg' },
-    { Icon: FiBriefcase, label: 'Software & Product bei IMPECT' },
-    { Icon: FiBookOpen, label: 'B.Sc. Wirtschaftsinformatik · Ø 1,8' },
-    { Icon: FiCode, label: 'Java · Angular · React · TypeScript' },
-    { label: 'Full-Stack' },
-    { label: 'Requirements Engineering' },
-    { label: 'Agentic Coding' },
-    { label: 'Product Thinking' },
-    { label: 'Data & Analytics' },
-    { label: 'Webentwicklung' },
-];
-
-const fadeIn = (inView, delay) => ({
-    opacity: inView ? 1 : 0,
-    transform: inView ? 'translateY(0)' : 'translateY(12px)',
-    transitionDelay: `${delay}ms`,
-});
+const NAME_CLASS =
+    'justify-center whitespace-nowrap font-serif text-[100px] font-bold uppercase leading-[0.75] tracking-tighter text-ink sm:text-[140px] md:text-[180px] lg:text-[210px]';
 
 function Hero() {
-    const [ref, inView] = useInView();
-
     const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
     return (
-        <section
-            id="hero"
-            ref={ref}
-            className="relative flex min-h-[100svh] flex-col overflow-hidden font-serif"
-        >
-            {/* darkens the video so text stays legible */}
-            <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-black/50 via-black/35 to-black/80" />
+        <section id="hero" className="relative flex min-h-[100svh] flex-col overflow-hidden bg-cream">
+            {/* name with the portrait centered on top of it */}
+            <div className="absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 px-4">
+                <h1 className="relative m-0 text-center" aria-label="Benny Herdt">
+                    <span className="block"><BlurText as="span" text="BENNY" delay={100} animateBy="letters" className={NAME_CLASS} /></span>
+                    <span className="block"><BlurText as="span" text="HERDT" delay={100} animateBy="letters" className={NAME_CLASS} /></span>
 
-            {/* greeting + name sit in the upper part of the screen */}
-            <div className="relative z-10 flex flex-col items-center px-5 pt-[16vh] text-center sm:px-12 sm:pt-[18vh] lg:px-20">
-                <p
-                    className="m-0 mb-5 font-inter text-sm font-medium text-white/80 transition-[opacity,transform] duration-700 ease-out sm:text-base"
-                    style={fadeIn(inView, 0)}
-                >
-                    <span className="mr-2 inline-block origin-[70%_70%] animate-wave motion-reduce:animate-none" aria-hidden>👋</span>
-                    Hallo und herzlich willkommen, ich bin
-                </p>
-
-                <h1 className="m-0 flex flex-wrap justify-center gap-x-[0.25em] whitespace-nowrap text-[13vw] font-medium leading-[1.05] tracking-[-0.02em] text-white sm:text-8xl lg:text-[8.5rem]">
-                    <RevealLine inView={inView} delay={80}>Benny</RevealLine>
-                    <RevealLine inView={inView} delay={200}><span className="text-white/65">Herdt</span></RevealLine>
+                    <span className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+                        <span className="block h-[110px] w-[65px] cursor-pointer overflow-hidden rounded-full bg-[#e5e5e5] shadow-2xl transition-transform duration-300 hover:scale-110 sm:h-[152px] sm:w-[90px] md:h-[185px] md:w-[110px] lg:h-[218px] lg:w-[129px]">
+                            <img src={bennyHero} alt="Benny Herdt" className="h-full w-full object-cover object-top" width={390} height={659} />
+                        </span>
+                    </span>
                 </h1>
-
-                <p
-                    className="m-0 mt-6 text-balance font-inter xl:whitespace-nowrap text-base leading-relaxed text-white/85 transition-[opacity,transform] duration-700 ease-out sm:mt-8 sm:text-lg"
-                    style={fadeIn(inView, 350)}
-                >
-                    <OrgLinks className="decoration-white/40 hover:text-accent hover:decoration-accent">Wirtschaftsinformatik-Student an der OTH Regensburg und Werkstudent in Softwareentwicklung und Product bei IMPECT.</OrgLinks>
-                </p>
             </div>
 
-            {/* banner and actions are grouped in the lower part */}
-            <div className="relative z-10 mt-auto flex flex-col items-center pb-[12vh] pt-16 text-center sm:pb-[14vh]">
-                {/* the list is rendered twice so the loop is seamless */}
-                <div
-                    className="relative w-full overflow-hidden border-y border-white/15 py-3 transition-opacity duration-700 ease-out sm:py-3.5"
-                    style={{ opacity: inView ? 1 : 0, transitionDelay: '450ms' }}
-                    aria-label={bannerItems.map((item) => item.label).join(', ')}
-                >
-                    <div className="flex w-max animate-marquee motion-reduce:animate-none" aria-hidden>
-                        {[0, 1].map((copy) => (
-                            <ul key={copy} className="m-0 flex list-none items-center p-0">
-                                {bannerItems.map(({ Icon, label }) => (
-                                    <li key={label} className="flex items-center whitespace-nowrap font-inter text-xs font-medium uppercase tracking-[0.16em] text-white/80 sm:text-[13px]">
-                                        {Icon && <Icon className="mr-2 text-[1.05em] text-white/50" />}
-                                        {label}
-                                        <span className="mx-6 h-3 w-px bg-white/25 sm:mx-8" />
-                                    </li>
-                                ))}
-                            </ul>
-                        ))}
-                    </div>
-                </div>
-
-                <div
-                    className="mt-9 flex flex-wrap items-center justify-center gap-3 px-5 transition-[opacity,transform] duration-700 ease-out"
-                    style={fadeIn(inView, 600)}
-                >
-                    <a
-                        href="/Lebenslauf_DE.pdf"
-                        download="Lebenslauf_Benny_Herdt.pdf"
-                        className="group inline-flex items-center gap-2.5 rounded-full bg-white px-5 py-3 font-inter text-sm font-semibold text-black no-underline transition-[background,transform] duration-200 ease-out hover:bg-accent active:scale-[0.97]"
-                    >
-                        <FiDownload className="transition-transform duration-200 group-hover:translate-y-0.5" />
-                        Lebenslauf (PDF)
-                    </a>
-                    <button
-                        type="button"
-                        onClick={() => scrollTo('projects')}
-                        className="group inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-black/20 px-5 py-3 font-inter text-sm font-semibold text-white backdrop-blur-md transition-colors duration-200 hover:border-white/60"
-                    >
-                        Projekte ansehen
-                        <FiArrowDown className="transition-transform duration-200 group-hover:translate-y-0.5" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => scrollTo('kontakt')}
-                        className="inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-black/20 px-5 py-3 font-inter text-sm font-semibold text-white backdrop-blur-md transition-colors duration-200 hover:border-white/60"
-                    >
-                        <FiMail />
-                        Kontakt
-                    </button>
+            {/* tagline, well below the name */}
+            <div className="absolute bottom-16 left-1/2 w-full -translate-x-1/2 px-6 sm:bottom-20 md:bottom-24 lg:bottom-32 xl:bottom-36">
+                <div className="flex justify-center">
+                    <BlurText
+                        text="Software, Product und Agentic Coding aus Regensburg."
+                        delay={150}
+                        animateBy="words"
+                        className="m-0 justify-center text-center font-antic text-[15px] text-stone-500 transition-colors duration-300 hover:text-ink sm:text-[18px] md:text-[20px] lg:text-[22px]"
+                    />
                 </div>
             </div>
+
+            <button
+                type="button"
+                onClick={() => scrollTo('about')}
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 text-stone-500 transition-colors duration-300 hover:text-ink md:bottom-10"
+                aria-label="Nach unten scrollen"
+            >
+                <FiChevronDown className="h-5 w-5 md:h-8 md:w-8" />
+            </button>
         </section>
     );
 }

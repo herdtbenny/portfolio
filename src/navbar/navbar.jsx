@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { FiDownload, FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi';
 
 const ACTIVE_SECTION_OFFSET_RATIO = 0.35;
 
@@ -6,73 +7,52 @@ const navItems = [
     { label: 'Start', id: 'hero' },
     { label: 'Über mich', id: 'about' },
     { label: 'Lebenslauf', id: 'lebenslauf' },
-    { label: 'Interessen', id: 'interessen' },
     { label: 'Projekte', id: 'projects' },
     { label: 'Kontakt', id: 'kontakt' },
 ];
 
-const glassStyleLight = {
-    background: 'rgba(243,237,226,0.72)',
-    backdropFilter: 'blur(24px) saturate(140%)',
-    WebkitBackdropFilter: 'blur(24px) saturate(140%)',
-    border: '1px solid rgba(29,27,24,0.08)',
-    boxShadow: '0 8px 32px rgba(29, 27, 24, 0.08)',
-};
+// the class is set before first paint in public/index.html; this keeps it and the stored choice in sync
+function useTheme() {
+    const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'));
+    const toggle = () => {
+        const next = !dark;
+        document.documentElement.classList.toggle('dark', next);
+        try { localStorage.setItem('theme', next ? 'dark' : 'light'); } catch { /* private mode */ }
+        setDark(next);
+    };
+    return [dark, toggle];
+}
 
-const glassStyleDark = {
-    background: 'rgba(255,255,255,0.03)',
-    backdropFilter: 'blur(40px) saturate(160%)',
-    WebkitBackdropFilter: 'blur(40px) saturate(160%)',
-    border: '1px solid rgba(255,255,255,0.07)',
-    boxShadow: `
-    inset 0 1px 0 rgba(255,255,255,0.10),
-    0 8px 32px rgba(0, 0, 0, 0.20)
-  `,
-};
-
-// text colors per background: over the hero video vs. on the cream content
-const NAV_COLORS = {
-    dark: { active: '#F2F2F0', idle: 'rgba(255,255,255,0.45)', hover: 'rgba(255,255,255,0.85)', },
-    light: { active: '#1d1b18', idle: 'rgba(29,27,24,0.5)', hover: 'rgba(29,27,24,0.85)' },
-};
-
-function NavBtn({ item, active, onClick, mobile = false, light = false }) {
-    const c = light ? NAV_COLORS.light : NAV_COLORS.dark;
+// sun and moon sit in the track, the knob slides over the inactive one and shows the active one
+export function ThemeToggle({ className = '' }) {
+    const [dark, toggle] = useTheme();
+    const KnobIcon = dark ? FiMoon : FiSun;
     return (
         <button
-            onClick={onClick}
-            aria-current={active ? 'true' : undefined}
-            className={
-                mobile
-                    ? 'w-full rounded-2xl px-5 py-3.5 text-center text-base tracking-wide transition-[color,transform] duration-200 ease-out active:scale-[0.97]'
-                    : 'rounded-full px-3.5 py-2 text-xs tracking-wide transition-[color,transform] duration-200 ease-out active:scale-[0.95] lg:px-5 lg:text-sm'
-            }
-            style={{
-                color: active ? c.active : c.idle,
-            }}
-            onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = c.hover; }}
-            onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = c.idle; }}
+            type="button"
+            onClick={toggle}
+            className={`relative h-8 w-16 shrink-0 rounded-full bg-ink/15 transition-opacity hover:opacity-80 ${className}`}
+            aria-label={dark ? 'Helles Design einschalten' : 'Dunkles Design einschalten'}
+            title={dark ? 'Helles Design' : 'Dunkles Design'}
         >
-            {/* an invisible bold copy reserves the width, so the bar doesn't shift when the weight changes */}
-            <span className="inline-grid">
-                <span className="invisible col-start-1 row-start-1 font-bold" aria-hidden>{item.label}</span>
-                <span className={`col-start-1 row-start-1 transition-[font-weight] duration-200 ${active ? 'font-bold' : 'font-medium'}`}>{item.label}</span>
+            <FiSun className="absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-stone-500" aria-hidden />
+            <FiMoon className="absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-stone-500" aria-hidden />
+            <span
+                className="absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-ink text-cream transition-transform duration-300"
+                style={{ transform: dark ? 'translateX(2rem)' : 'translateX(0)' }}
+            >
+                <KnobIcon className="h-3.5 w-3.5" aria-hidden />
             </span>
         </button>
     );
 }
 
 function Navbar({ scrollTo }) {
-    const [mounted, setMounted] = useState(false);
-    const [mobileOpen, setMobileOpen] = useState(false);
+    const [open, setOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('hero');
-    // switches to the light glass once the hero video has scrolled away
-    const [light, setLight] = useState(false);
-
-    useEffect(() => {
-        const raf = requestAnimationFrame(() => setMounted(true));
-        return () => cancelAnimationFrame(raf);
-    }, []);
+    const [scrolled, setScrolled] = useState(false);
+    const buttonRef = useRef(null);
+    const firstItemRef = useRef(null);
 
     useEffect(() => {
         let raf = null;
@@ -83,15 +63,10 @@ function Navbar({ scrollTo }) {
                 let current = navItems[0].id;
                 for (const item of navItems) {
                     const el = document.getElementById(item.id);
-                    if (el && el.getBoundingClientRect().top <= offset) {
-                        current = item.id;
-                    }
+                    if (el && el.getBoundingClientRect().top <= offset) current = item.id;
                 }
                 setActiveSection(current);
-                // the cream starts where the about section begins, after the fade band
-                const about = document.getElementById('about');
-                setLight(about ? about.getBoundingClientRect().top < window.innerHeight * 0.25 : false);
-
+                setScrolled(window.scrollY > 24);
                 raf = null;
             });
         };
@@ -105,81 +80,123 @@ function Navbar({ scrollTo }) {
         };
     }, []);
 
-    const handleScrollTo = (id) => {
-        scrollTo(id);
-        setMobileOpen(false);
-    };
+    // while the side menu is open: Escape closes it, the page behind doesn't scroll, focus moves in
+    useEffect(() => {
+        if (!open) return undefined;
+        const onKey = (e) => {
+            if (e.key === 'Escape') { setOpen(false); buttonRef.current?.focus(); }
+        };
+        document.addEventListener('keydown', onKey);
+        const overflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        firstItemRef.current?.focus({ preventScroll: true });
+        return () => {
+            document.removeEventListener('keydown', onKey);
+            document.body.style.overflow = overflow;
+        };
+    }, [open]);
 
-    const navEntranceStyle = {
-        opacity: mounted ? 1 : 0,
-        transform: mounted ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(-16px)',
-        transition: 'opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1)',
-    };
-    const hamburgerEntranceStyle = {
-        opacity: mounted ? 1 : 0,
-        transform: mounted ? 'translateY(0)' : 'translateY(-16px)',
-        transition: 'opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1)',
+    const go = (id) => {
+        setOpen(false);
+        scrollTo(id);
     };
 
     return (
         <>
-            {/* Desktop pill nav */}
-            <nav className="fixed left-1/2 top-5 z-50 hidden w-auto whitespace-nowrap font-inter md:block" style={navEntranceStyle}>
-                <div className="relative flex flex-col overflow-hidden rounded-[2rem]" style={light ? glassStyleLight : glassStyleDark}>
-
-                    {/* Specular top-edge gloss */}
-                    <div
-                        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-                        style={{ background: 'linear-gradient(to right, transparent 0%, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.3) 75%, transparent 100%)' }}
-                    />
-
-                    <ul className="m-0 flex list-none items-center justify-center gap-1 px-2 py-2 lg:gap-3">
-                        {navItems.map((item) => (
-                            <li key={item.id}>
-                                <NavBtn item={item} light={light} active={activeSection === item.id} onClick={() => scrollTo(item.id)} />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </nav>
-
-            {/* Mobile/tablet hamburger — pinned to the top-right corner of the screen */}
-            <div className="fixed right-5 top-6 z-50 md:hidden" style={hamburgerEntranceStyle}>
-                <button
-                    onClick={() => setMobileOpen((v) => !v)}
-                    aria-label={mobileOpen ? 'Menü schließen' : 'Menü öffnen'}
-                    aria-expanded={mobileOpen}
-                    className={`flex h-10 w-10 items-center justify-center rounded-full transition-[color,transform] duration-150 ease-out active:scale-90 ${light ? 'text-ink/80 hover:text-ink' : 'text-white/80 hover:text-white'}`}
-                    style={light ? glassStyleLight : glassStyleDark}
-                >
-                    {mobileOpen ? (
-                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <line x1="6" y1="6" x2="18" y2="18" />
-                            <line x1="18" y1="6" x2="6" y2="18" />
-                        </svg>
-                    ) : (
-                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <line x1="4" y1="7" x2="20" y2="7" />
-                            <line x1="4" y1="12" x2="20" y2="12" />
-                            <line x1="4" y1="17" x2="20" y2="17" />
-                        </svg>
-                    )}
-                </button>
-            </div>
-
-            {/* Mobile dropdown — full width, under the hamburger */}
-            <div
-                className={`fixed inset-x-5 top-[76px] z-40 overflow-hidden rounded-[1.75rem] font-inter transition-all duration-300 ease-out md:hidden ${
-                    mobileOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
+            <header
+                className={`fixed inset-x-0 top-0 z-50 px-4 py-4 transition-[background-color,backdrop-filter] duration-300 sm:px-6 sm:py-5 ${
+                    scrolled ? 'bg-cream/80 backdrop-blur-md' : 'bg-transparent'
                 }`}
-                style={light ? glassStyleLight : glassStyleDark}
             >
-                <div className="flex flex-col items-center gap-1 p-3">
-                    {navItems.map((item) => (
-                        <NavBtn key={item.id} item={item} light={light} active={activeSection === item.id} onClick={() => handleScrollTo(item.id)} mobile />
-                    ))}
+                <nav className="mx-auto flex max-w-screen-2xl items-center justify-between" aria-label="Hauptnavigation">
+                    <button
+                        ref={buttonRef}
+                        type="button"
+                        className="p-2 text-stone-500 transition-colors duration-300 hover:text-ink"
+                        aria-label="Menü öffnen"
+                        aria-expanded={open}
+                        aria-controls="site-menu"
+                        onClick={() => setOpen(true)}
+                    >
+                        <FiMenu className="h-8 w-8" strokeWidth={2} />
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => go('hero')}
+                        className="font-signature text-4xl leading-none text-ink"
+                        aria-label="Benny Herdt – nach oben"
+                    >
+                        B
+                    </button>
+
+                    <ThemeToggle />
+                </nav>
+            </header>
+
+            {/* side menu: full height from the left, with a dimmed page behind it */}
+            <div
+                className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+                onClick={() => setOpen(false)}
+                aria-hidden
+            />
+            <aside
+                id="site-menu"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Menü"
+                aria-hidden={!open}
+                inert={!open}
+                className={`fixed inset-y-0 left-0 z-[70] flex w-[min(88vw,420px)] flex-col bg-cream px-6 pb-8 pt-5 shadow-2xl ring-1 ring-ink/10 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-10 sm:pt-6 ${
+                    open ? 'translate-x-0' : '-translate-x-full'
+                }`}
+            >
+                <div className="flex items-center justify-between">
+                    <span className="font-signature text-4xl leading-none text-ink">B</span>
+                    <button
+                        type="button"
+                        onClick={() => { setOpen(false); buttonRef.current?.focus(); }}
+                        className="p-2 text-stone-500 transition-colors duration-300 hover:text-ink"
+                        aria-label="Menü schließen"
+                    >
+                        <FiX className="h-8 w-8" strokeWidth={2} />
+                    </button>
                 </div>
-            </div>
+
+                <ul className="m-0 mt-14 flex list-none flex-col gap-1 p-0 sm:mt-20">
+                    {navItems.map((item, i) => {
+                        const active = activeSection === item.id;
+                        return (
+                            <li key={item.id}>
+                                <button
+                                    ref={i === 0 ? firstItemRef : undefined}
+                                    type="button"
+                                    onClick={() => go(item.id)}
+                                    aria-current={active ? 'true' : undefined}
+                                    className={`group flex w-full items-baseline gap-4 py-2 text-left font-serif text-3xl font-bold uppercase tracking-tight transition-colors duration-300 hover:text-accent-deep sm:text-4xl ${
+                                        active ? 'text-accent-deep' : 'text-ink'
+                                    }`}
+                                >
+                                    <span className="font-mono text-xs font-normal text-stone-500">{String(i + 1).padStart(2, '0')}</span>
+                                    {item.label}
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ul>
+
+                <div className="mt-auto border-t border-ink/10 pt-6">
+                    <a
+                        href="/Lebenslauf_DE.pdf"
+                        download="Lebenslauf_Benny_Herdt.pdf"
+                        className="group inline-flex items-center gap-2.5 font-inter text-sm font-semibold text-ink no-underline transition-colors hover:text-accent-deep"
+                    >
+                        <FiDownload className="transition-transform duration-200 group-hover:translate-y-0.5" />
+                        Lebenslauf herunterladen (PDF)
+                    </a>
+                    <p className="m-0 mt-3 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500">Benny Herdt · Regensburg</p>
+                </div>
+            </aside>
         </>
     );
 }
